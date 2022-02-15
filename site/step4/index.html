@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>React Sample Step4</title>
+	<!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+	<script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+	<script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+
+	<script src="js/ReactButton.js"></script>
+</head>
+
+<body>
+
+	<h1>React Sample Stage 4 - Props<h1>
+	<div id='sample-container'></id>
+
+</body>
+
+<script>
+
+const domContainer = document.querySelector('#sample-container');
+ReactDOM.render( React.createElement(ReactButton, null) , domContainer);
+
+</script>
+
+
+</html>

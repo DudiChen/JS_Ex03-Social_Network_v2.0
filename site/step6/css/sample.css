@@ -1,0 +1,28 @@
+body 
+{
+	font-family: arial;
+	color: darkgray;
+}
+
+h1
+{
+	text-align: center;
+}
+
+button
+{
+	margin-left: 4px;
+	margin-right: 4px;
+}
+
+.hidden
+{
+	display: none;
+}
+
+#sample-container
+{
+	width: 50%;
+	margin-left: auto;
+	margin-right: auto;
+}

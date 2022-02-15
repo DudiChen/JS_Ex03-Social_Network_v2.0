@@ -1,0 +1,720 @@
+{
+	"info": {
+		"_postman_id": "7f40f941-2384-48f4-8a4d-1b14ed5e6248",
+		"name": "my_api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "register",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.test(\"Status code is 201 = user created\", () => {\r",
+							"  pm.expect(pm.response.code).to.eql(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 409 = user exist\", () => {\r",
+							"  pm.expect(pm.response.code).to.eql(409);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 400 = invalid inputs\", () => {\r",
+							"  pm.expect(pm.response.code).to.eql(400);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"full_name\": \" lior moreno\",\r\n    \"email\": \"lior@gmail.com\",\r\n    \"password\": \"12345678\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:2718/api/users/register",
+					"host": [
+						"localhost"
+					],
+					"port": "2718",
+					"path": [
+						"api",
+						"users",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"The response token is string\", () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.token).to.be.a('string');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 200 = login success\", () => {\r",
+							"  pm.expect(pm.response.code).to.eql(200);\r",
+							"//  pm.environment.set('token', jsonData.token);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Login has token\", () => {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.collectionVariables.set(\"token\", jsonData.token);\r",
+							"    return token !== undefined;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 400 = invalid inputs or acount not activated\", () => {\r",
+							"  pm.expect(pm.response.code).to.eql(400);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"admin@gmail.com\",\r\n    \"password\":\"12345678\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:2718/api/users/login",
+					"host": [
+						"localhost"
+					],
+					"port": "2718",
+					"path": [
+						"api",
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get_all_users",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 = the list was expected\", () => {\r",
+							"  pm.expect(pm.response.code).to.eql(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 401 = user token not admin\", () => {\r",
+							"  pm.expect(pm.response.code).to.eql(401);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Print list to console\", function(){\r",
+							"    const jsonData = pm.response.json();\r",
+							"    console.log(jsonData);\r",
+							"})\r",
+							"\r",
+							"\r",
+							"pm.test(\"Status code is 404 = token not found in DB\", ()=>{\r",
+							"  pm.expect(pm.response.code).to.eql(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:2718/api/users/get_all_users",
+					"host": [
+						"localhost"
+					],
+					"port": "2718",
+					"path": [
+						"api",
+						"users",
+						"get_all_users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "change_status",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 = user status as been changed\", () => {\r",
+							"    console.log(pm.response.text());\r",
+							"  pm.expect(pm.response.code).to.eql(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 401 = user token is not admin\", () => {\r",
+							"  pm.expect(pm.response.code).to.eql(401);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 400 = invalid email or status\", () => {\r",
+							"  pm.expect(pm.response.code).to.eql(400);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Status code is 404 = user not found in DB\", ()=>{\r",
+							"  pm.expect(pm.response.code).to.eql(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"tom@gmail.com\",\r\n    \"status\": \"deleted\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:2718/api/users/change_user_status",
+					"host": [
+						"localhost"
+					],
+					"port": "2718",
+					"path": [
+						"api",
+						"users",
+						"change_user_status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "send_post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 = post as been send\", () => {\r",
+							"    console.log(pm.response.json());\r",
+							"  pm.expect(pm.response.code).to.eql(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 400 = inputs required\", () => {\r",
+							"  pm.expect(pm.response.code).to.eql(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 404 = user not found in DB\", ()=>{\r",
+							"  pm.expect(pm.response.code).to.eql(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"text\": \"postman post.\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:2718/api/post/send_post",
+					"host": [
+						"localhost"
+					],
+					"port": "2718",
+					"path": [
+						"api",
+						"post",
+						"send_post"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete_post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 = post as been deleted\", () => {\r",
+							"  console.log(pm.response.json());\r",
+							"  pm.expect(pm.response.code).to.eql(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 400 = post id empty or invalid\", () => {\r",
+							"  pm.expect(pm.response.code).to.eql(400);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Status code is 404 = post not found in DB\", ()=>{\r",
+							"  pm.expect(pm.response.code).to.eql(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"obj_id\": 5\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:2718/api/post/delete_post",
+					"host": [
+						"localhost"
+					],
+					"port": "2718",
+					"path": [
+						"api",
+						"post",
+						"delete_post"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete_post as admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 = post as been deleted\", () => {\r",
+							"  console.log(pm.response.json());\r",
+							"  pm.expect(pm.response.code).to.eql(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 400 = post id or email empty or invalid\", () => {\r",
+							"  pm.expect(pm.response.code).to.eql(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 401 = user token is not admin\", () => {\r",
+							"  pm.expect(pm.response.code).to.eql(401);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 404 = user not found in DB\", ()=>{\r",
+							"  pm.expect(pm.response.code).to.eql(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"obj_id\": 2,\r\n    \"email\": \"shiraz@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:2718/api/post/delete_post_admin",
+					"host": [
+						"localhost"
+					],
+					"port": "2718",
+					"path": [
+						"api",
+						"post",
+						"delete_post_admin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "find_user_posts",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 = post list aproved\", () => {\r",
+							"  console.log(pm.response.json());\r",
+							"  pm.expect(pm.response.code).to.eql(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 400 = email empty or invalid\", () => {\r",
+							"  pm.expect(pm.response.code).to.eql(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 404 = user not found in DB\", ()=>{\r",
+							"  pm.expect(pm.response.code).to.eql(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"shiraz@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:2718/api/post/user_posts",
+					"host": [
+						"localhost"
+					],
+					"port": "2718",
+					"path": [
+						"api",
+						"post",
+						"user_posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get_request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 = request list aproved\", () => {\r",
+							"  console.log(pm.response.json());\r",
+							"  pm.expect(pm.response.code).to.eql(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 401 = user token is not admin\", () => {\r",
+							"  pm.expect(pm.response.code).to.eql(401);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:2718/api/users/get_all_request",
+					"host": [
+						"localhost"
+					],
+					"port": "2718",
+					"path": [
+						"api",
+						"users",
+						"get_all_request"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "send_messge",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 = message was sent\", () => {\r",
+							"  console.log(pm.response.json());\r",
+							"  pm.expect(pm.response.code).to.eql(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 401 = user token is not admin\", () => {\r",
+							"  pm.expect(pm.response.code).to.eql(401);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 400 = user email empty or invalid\", () => {\r",
+							"  pm.expect(pm.response.code).to.eql(400);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Status code is 404 = user not found in DB\", ()=>{\r",
+							"  pm.expect(pm.response.code).to.eql(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"text\":\"welcome shiraz :)\",\r\n    \"to\": \"shiraz@gmail.com\",\r\n    \"send_all\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:2718/api/message/send_message",
+					"host": [
+						"localhost"
+					],
+					"port": "2718",
+					"path": [
+						"api",
+						"message",
+						"send_message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "logout",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 = logout success\", () => {\r",
+							"  console.log(pm.response.text());\r",
+							"  pm.expect(pm.response.code).to.eql(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 400 = invalid token\", () => {\r",
+							"  pm.expect(pm.response.code).to.eql(400);\r",
+							"});\r",
+							"\r",
+							"postman.setNextRequest(null);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:2718/api/users/logout",
+					"host": [
+						"localhost"
+					],
+					"port": "2718",
+					"path": [
+						"api",
+						"users",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": ""
+		}
+	]
+}

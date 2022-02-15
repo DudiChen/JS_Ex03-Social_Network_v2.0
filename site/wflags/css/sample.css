@@ -1,0 +1,46 @@
+body 
+{
+	font-family: arial;
+	color: darkgray;
+}
+
+h1
+{
+	text-align: center;
+}
+
+
+#sample-container
+{
+	margin-top: 5rem;
+	text-align: left;
+	margin-left: 30%;
+	width: 300px;
+	height: 300px;
+}
+
+.FlagListContainer
+{
+	overflow:auto;
+	height: 100%;
+}
+
+.selected 
+{
+	background-color: blue;
+	color: white;
+}
+
+.country_name
+{
+	margin-left: 8px;
+}
+
+
+.CountryItem:hover
+{
+	background-color: lightgray;	
+	cursor: pointer;
+	color: white;
+}
+

@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>React Sample Step 6</title>
+	<!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+	<script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+	<script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+
+	<script src="js/ReactButtons.js"></script>
+	<link rel="stylesheet" type='text/css' href="css/sample.css">
+</head>
+
+<body>
+
+	<h1>React Sample Stage 6 - Handling Events<h1>
+	<div id='sample-container'></id>
+
+</body>
+
+<script>
+
+const domContainer = document.querySelector('#sample-container');
+ReactDOM.render( React.createElement(ReactButtons , null ), domContainer);
+
+</script>
+
+
+</html>

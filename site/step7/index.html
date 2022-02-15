@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>React Sample Step 7</title>
+	<!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+	<script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+	<script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+
+	<script src="js/UserList.js"></script>
+	
+	<link rel="stylesheet" type='text/css' href="css/sample.css">
+</head>
+
+<body>
+
+	<h1>React Sample Stage 7 - Component Lifetime<h1>
+	<div id='sample-container'></id>
+
+</body>
+
+<script>
+
+const domContainer = document.querySelector('#sample-container');
+ReactDOM.render( React.createElement(UserList , null ), domContainer);
+
+</script>
+
+
+</html>
