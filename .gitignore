@@ -1,4 +1,4 @@
-./Backend/API/node_modules
-./Frontend/node_modules
-./site/step4/src/node_modules
+Backend/API/node_modules
+Frontend/node_modules
+site/step4/src/node_modules
 
