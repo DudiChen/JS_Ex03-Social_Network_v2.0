@@ -43,6 +43,23 @@
   border-color: #f34343;
 }
 
+.button--img {
+  background: white;
+  border-color: white;
+  width: 200px;
+}
+
+.button--img > * {
+  max-width:100%;
+  max-height:100%;
+}
+
+.button--img:hover,
+.button--img:active {
+  background: white;
+  border-color: white;
+}
+
 .button:disabled,
 .button:hover:disabled,
 .button:active:disabled {

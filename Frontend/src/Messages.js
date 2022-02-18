@@ -182,18 +182,7 @@ class Input extends React.Component {
     }
 }
 
-function getCookie(name) {
-    var nameEQ = name + "=";
-    var ca = document.cookie.split(';');
-    for(var i=0;i < ca.length;i++) {
-        var c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1,c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-    }
-    return null;
-}
-
-class Homapage extends React.Component{
+class Messages extends React.Component{
 
     constructor(props) {
         super(props);
@@ -274,7 +263,7 @@ class Homapage extends React.Component{
     render() 
     {
 
-        const POSTS_STUB = [
+        const MESSAGES_STUB = [
             {
                 id: 1,
                 email: "alex@gmail.com",
@@ -321,9 +310,9 @@ class Homapage extends React.Component{
                         <NavLinks />
                     </nav>
                 </header>
-                <div className="posts">
-                    <h2>Create new post</h2>
-                    <Card className="place-form">
+                <div className="messages">
+                    <h2>Send a message</h2>
+                    <Card className="message-form">
                         <form onSubmit={this.handle_submit}>
                             <Input 
                                 element='textarea' 
@@ -336,8 +325,8 @@ class Homapage extends React.Component{
                             <Button className='login_button' type="submit">SUBMIT</Button>
                         </form>
                     </Card>
-                    <h2>Recent posts</h2>
-                    {POSTS_STUB.map(post => (
+                    <h2>Your messages</h2>
+                    {MESSAGES_STUB.map(post => (
                         <Card className="place-form">
                             <h3>{post.email}</h3>
                             <p>{post.text}</p>

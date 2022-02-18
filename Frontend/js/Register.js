@@ -33,17 +33,16 @@ class NavLinks extends React.Component {
     constructor(props) {
         super(props);
 
-        this.open_homepage_handler = this.open_homepage_handler.bind(this);
-        this.open_messages_handler = this.open_messages_handler.bind(this);
-        this.open_about_handler = this.open_about_handler.bind(this);
+        this.open_login_handler = this.open_login_handler.bind(this);
+        this.open_register_handler = this.open_register_handler.bind(this);
     }
 
-    open_homepage_handler() {
-        window.location.href = "homepage.html";
+    open_login_handler() {
+        window.location.href = "index.html";
     }
 
-    open_messages_handler() {
-        window.location.href = "messages.html";
+    open_register_handler() {
+        window.location.href = "register.html";
     }
 
     open_about_handler() {
@@ -59,8 +58,8 @@ class NavLinks extends React.Component {
                 null,
                 React.createElement(
                     Button,
-                    { type: "link", onClick: this.open_homepage_handler },
-                    "Homepage"
+                    { type: "link", onClick: this.open_login_handler },
+                    "Login"
                 )
             ),
             React.createElement(
@@ -68,8 +67,8 @@ class NavLinks extends React.Component {
                 null,
                 React.createElement(
                     Button,
-                    { type: "link", onClick: this.open_messages_handler },
-                    "Messages"
+                    { type: "link", onClick: this.open_register_handler },
+                    "Register"
                 )
             ),
             React.createElement(
@@ -83,7 +82,6 @@ class NavLinks extends React.Component {
             )
         );
     }
-
 }
 
 class Button extends React.Component {
@@ -187,23 +185,13 @@ class Input extends React.Component {
     }
 }
 
-function getCookie(name) {
-    var nameEQ = name + "=";
-    var ca = document.cookie.split(';');
-    for (var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-    }
-    return null;
-}
-
-class Homapage extends React.Component {
+class Register extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            text: ''
+            email: '',
+            password: ''
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -212,99 +200,56 @@ class Homapage extends React.Component {
 
     handleInputChange(event, name, value) {
         const target = event.target;
+        // const value = target.type === 'checkbox' ? target.checked : target.value;
+        // const name = target.name;
+        //alert(`target = ${target}, name = ${name}, value = ${value}`)
         this.setState({
             [name]: value
         });
     }
 
-    async fetch_posts() {
-        const email = "admin@gmail.com";
-
-        const response = await fetch('http://localhost:2718/api/post/user_posts', {
-            method: 'POST',
-            body: JSON.stringify({
-                email: email
-            }),
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${getCookie("token")}`
-            }
-        });
-
-        if (response.status == 200) {
-            const responseJson = await response.json();
-            return responseJson;
-        }
-
-        return [];
-    }
-
     async componentDidMount() {
-        const posts = await this.fetch_posts();
-        //this.update_list(users);
+        eraseCookie("token");
     }
 
     async handle_submit(event) {
         event.preventDefault();
 
-        const username = this.state.username;
+        const email = this.state.email;
         const password = this.state.password;
 
-        const response = await fetch('http://localhost:2718/api/users/send_message', {
+        alert(`email = ${email}`);
+
+        const response = await fetch('http://localhost:2718/api/users/login', {
             method: 'POST',
             body: JSON.stringify({
-                text: username,
-                to: password,
-                send_all: false
+                email: email,
+                password: password
             }),
-            headers: {
-                'Content-Type': 'application/json'
-
-            }
+            headers: { 'Content-Type': 'application/json' }
         });
 
         if (response.status == 200) {
             const responseJson = await response.json();
             setCookie("token", responseJson.token, 3);
+            window.location.href = "homepage.html";
         }
+        // else 
+        // {
+        //   const err = await response.text();
+        //   alert( err );
+        // }
     }
 
     render() {
-
-        const POSTS_STUB = [{
-            id: 1,
-            email: "alex@gmail.com",
-            text: "first post"
-        }, {
-            id: 2,
-            email: "alex@gmail.com",
-            text: "second post"
-        }, {
-            id: 3,
-            email: "alex@gmail.com",
-            text: "Smoked two joints in the morning"
-        }, {
-            id: 4,
-            email: "dudi@gmail.com",
-            text: "Smoked two joints at night"
-        }, {
-            id: 5,
-            email: "dudi@gmail.com",
-            text: "Fresh pasta 50 cents. BUY NOW?!@#!@$!@"
-        }, {
-            id: 6,
-            email: "africa@gmail.com",
-            text: "KISS KISS"
-        }];
-
         return React.createElement(
             "div",
             null,
             React.createElement(
-                "header",
-                { className: "main-header" },
+                MainHeader,
+                null,
                 React.createElement(
-                    "button",
+                    Button,
                     {
                         className: "main-navigation__menu-btn"
                     },
@@ -319,52 +264,44 @@ class Homapage extends React.Component {
                 )
             ),
             React.createElement(
-                "div",
-                { className: "posts" },
+                Card,
+                { className: "authentication" },
                 React.createElement(
-                    "h2",
-                    null,
-                    "Create new post"
-                ),
-                React.createElement(
-                    Card,
-                    { className: "place-form" },
+                    "form",
+                    { className: "login_form", onSubmit: this.handle_submit },
                     React.createElement(
-                        "form",
-                        { onSubmit: this.handle_submit },
-                        React.createElement(Input, {
-                            element: "textarea",
-                            type: "text",
-                            name: "text",
-                            value: this.state.text,
-                            label: "Add your post here",
-                            onChange: this.handleInputChange }),
-                        React.createElement(
-                            Button,
-                            { className: "login_button", type: "submit" },
-                            "SUBMIT"
-                        )
-                    )
-                ),
-                React.createElement(
-                    "h2",
-                    null,
-                    "Recent posts"
-                ),
-                POSTS_STUB.map(post => React.createElement(
-                    Card,
-                    { className: "place-form" },
-                    React.createElement(
-                        "h3",
+                        "h1",
                         null,
-                        post.email
+                        "Register Form"
                     ),
                     React.createElement(
-                        "p",
+                        "div",
                         null,
-                        post.text
+                        React.createElement(Input, {
+                            element: "input",
+                            type: "text",
+                            name: "email",
+                            value: this.state.email,
+                            label: "Email",
+                            onChange: this.handleInputChange })
+                    ),
+                    React.createElement("span", null),
+                    React.createElement("span", null),
+                    React.createElement("span", null),
+                    React.createElement(
+                        "div",
+                        null,
+                        React.createElement(Input, { element: "input", type: "text", name: "password", value: this.state.password, label: "Password", onChange: this.handleInputChange })
+                    ),
+                    React.createElement("span", null),
+                    React.createElement("span", null),
+                    React.createElement("span", null),
+                    React.createElement(
+                        Button,
+                        { className: "login_button", type: "submit" },
+                        "JOIN REQUEST"
                     )
-                ))
+                )
             )
         );
     }

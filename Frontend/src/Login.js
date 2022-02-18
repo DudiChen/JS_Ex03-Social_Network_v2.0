@@ -31,6 +31,21 @@ class NavLinks extends React.Component {
 
     constructor(props) {
         super(props);
+
+        this.open_login_handler = this.open_login_handler.bind(this);
+        this.open_register_handler = this.open_register_handler.bind(this);
+    }
+
+    open_login_handler() {
+        window.location.href = "index.html"
+    }
+
+    open_register_handler() {
+        window.location.href = "register.html"
+    }
+
+    open_about_handler() {
+        window.location.href = "about.html"
     }
 
     render() 
@@ -38,18 +53,17 @@ class NavLinks extends React.Component {
         return (
             <ul className="nav-links">
                 <li>
-                    <Button type='link'>Homepage</Button>
+                    <Button type='link' onClick={this.open_login_handler}>Login</Button>
                 </li>
                 <li>
-                    <Button type='link'>Messages</Button>
+                    <Button type='link' onClick={this.open_register_handler}>Register</Button>
                 </li>
                 <li>
-                    <Button type='link'>Register</Button>
+                    <Button type='link' onClick={this.open_about_handler}>About</Button>
                 </li>
             </ul>
         )
     }
-
 }
 
 class Button extends React.Component {
@@ -64,7 +78,8 @@ class Button extends React.Component {
             return (
               <a
                 className={`button button--${this.props.size || 'default'} ${this.props.inverse &&
-                  'button--inverse'} ${this.props.danger && 'button--danger'}`}
+                  'button--inverse'} ${this.props.danger && 'button--danger'} 
+                  ${this.props.img && 'button--img'}`}
                 href={this.props.href}
               >
                 {this.props.children}
@@ -85,8 +100,10 @@ class Button extends React.Component {
         //   }
           return (
             <button
-              className={`button button--${this.props.size || 'default'} ${this.props.inverse &&
-                'button--inverse'} ${this.props.danger && 'button--danger'}`}
+              className={`button button--${this.props.size || 'default'} 
+              ${this.props.inverse && 'button--inverse'} 
+              ${this.props.danger && 'button--danger'}
+              ${this.props.img && 'button--img'}`}
               type={this.props.type}
               onClick={this.props.onClick}
               disabled={this.props.disabled}
@@ -190,7 +207,6 @@ function eraseCookie(name) {
     document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
 
-
 class Login extends React.Component{
 
     constructor(props) {
@@ -205,7 +221,7 @@ class Login extends React.Component{
     }
 
     handleInputChange(event, name, value) 
-     {
+    {
         const target = event.target;
         // const value = target.type === 'checkbox' ? target.checked : target.value;
         // const name = target.name;
@@ -218,6 +234,10 @@ class Login extends React.Component{
     async componentDidMount() 
 	{
 		eraseCookie("token");
+        const script = document.createElement("script");
+        script.src = "Card.js";
+        script.async = true;
+        document.body.appendChild(script);
 	}
 
     async handle_submit(event)
@@ -243,7 +263,7 @@ class Login extends React.Component{
 		{
             const responseJson = await response.json();   
             setCookie("token", responseJson.token, 3);
-            window.location.href = "main.html"
+            window.location.href = "homepage.html"
 		}
 		// else 
 		// {
@@ -259,10 +279,9 @@ class Login extends React.Component{
                 <MainHeader>
                     <Button
                         className="main-navigation__menu-btn"
+                        img
                     >
-                    <span />
-                    <span />
-                    <span />
+                        <img src="img/icon.jpg"/>
                     </Button>
                     <nav className="main-navigation__header-nav">
                         <NavLinks />

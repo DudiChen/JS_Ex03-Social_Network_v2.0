@@ -32,6 +32,21 @@ class NavLinks extends React.Component {
 
     constructor(props) {
         super(props);
+
+        this.open_login_handler = this.open_login_handler.bind(this);
+        this.open_register_handler = this.open_register_handler.bind(this);
+    }
+
+    open_login_handler() {
+        window.location.href = "index.html";
+    }
+
+    open_register_handler() {
+        window.location.href = "register.html";
+    }
+
+    open_about_handler() {
+        window.location.href = "about.html";
     }
 
     render() {
@@ -43,8 +58,8 @@ class NavLinks extends React.Component {
                 null,
                 React.createElement(
                     Button,
-                    { type: "link" },
-                    "Homepage"
+                    { type: "link", onClick: this.open_login_handler },
+                    "Login"
                 )
             ),
             React.createElement(
@@ -52,22 +67,21 @@ class NavLinks extends React.Component {
                 null,
                 React.createElement(
                     Button,
-                    { type: "link" },
-                    "Messages"
-                )
-            ),
-            React.createElement(
-                "li",
-                null,
-                React.createElement(
-                    Button,
-                    { type: "link" },
+                    { type: "link", onClick: this.open_register_handler },
                     "Register"
+                )
+            ),
+            React.createElement(
+                "li",
+                null,
+                React.createElement(
+                    Button,
+                    { type: "link", onClick: this.open_about_handler },
+                    "About"
                 )
             )
         );
     }
-
 }
 
 class Button extends React.Component {
@@ -81,7 +95,8 @@ class Button extends React.Component {
             return React.createElement(
                 "a",
                 {
-                    className: `button button--${this.props.size || 'default'} ${this.props.inverse && 'button--inverse'} ${this.props.danger && 'button--danger'}`,
+                    className: `button button--${this.props.size || 'default'} ${this.props.inverse && 'button--inverse'} ${this.props.danger && 'button--danger'} 
+                  ${this.props.img && 'button--img'}`,
                     href: this.props.href
                 },
                 this.props.children
@@ -102,7 +117,10 @@ class Button extends React.Component {
         return React.createElement(
             "button",
             {
-                className: `button button--${this.props.size || 'default'} ${this.props.inverse && 'button--inverse'} ${this.props.danger && 'button--danger'}`,
+                className: `button button--${this.props.size || 'default'} 
+              ${this.props.inverse && 'button--inverse'} 
+              ${this.props.danger && 'button--danger'}
+              ${this.props.img && 'button--img'}`,
                 type: this.props.type,
                 onClick: this.props.onClick,
                 disabled: this.props.disabled
@@ -221,6 +239,10 @@ class Login extends React.Component {
 
     async componentDidMount() {
         eraseCookie("token");
+        const script = document.createElement("script");
+        script.src = "Card.js";
+        script.async = true;
+        document.body.appendChild(script);
     }
 
     async handle_submit(event) {
@@ -243,7 +265,7 @@ class Login extends React.Component {
         if (response.status == 200) {
             const responseJson = await response.json();
             setCookie("token", responseJson.token, 3);
-            window.location.href = "main.html";
+            window.location.href = "homepage.html";
         }
         // else 
         // {
@@ -262,11 +284,10 @@ class Login extends React.Component {
                 React.createElement(
                     Button,
                     {
-                        className: "main-navigation__menu-btn"
+                        className: "main-navigation__menu-btn",
+                        img: true
                     },
-                    React.createElement("span", null),
-                    React.createElement("span", null),
-                    React.createElement("span", null)
+                    React.createElement("img", { src: "img/icon.jpg" })
                 ),
                 React.createElement(
                     "nav",

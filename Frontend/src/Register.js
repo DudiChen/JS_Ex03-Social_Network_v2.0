@@ -32,18 +32,16 @@ class NavLinks extends React.Component {
     constructor(props) {
         super(props);
 
-        this.open_homepage_handler = this.open_homepage_handler.bind(this);
-        this.open_messages_handler = this.open_messages_handler.bind(this);
-        this.open_about_handler = this.open_about_handler.bind(this);
-
+        this.open_login_handler = this.open_login_handler.bind(this);
+        this.open_register_handler = this.open_register_handler.bind(this);
     }
 
-    open_homepage_handler() {
-        window.location.href = "homepage.html"
+    open_login_handler() {
+        window.location.href = "index.html"
     }
 
-    open_messages_handler() {
-        window.location.href = "messages.html"
+    open_register_handler() {
+        window.location.href = "register.html"
     }
 
     open_about_handler() {
@@ -55,10 +53,10 @@ class NavLinks extends React.Component {
         return (
             <ul className="nav-links">
                 <li>
-                    <Button type='link' onClick={this.open_homepage_handler}>Homepage</Button>
+                    <Button type='link' onClick={this.open_login_handler}>Login</Button>
                 </li>
                 <li>
-                    <Button type='link' onClick={this.open_messages_handler}>Messages</Button>
+                    <Button type='link' onClick={this.open_register_handler}>Register</Button>
                 </li>
                 <li>
                     <Button type='link' onClick={this.open_about_handler}>About</Button>
@@ -66,7 +64,6 @@ class NavLinks extends React.Component {
             </ul>
         )
     }
-
 }
 
 class Button extends React.Component {
@@ -182,23 +179,13 @@ class Input extends React.Component {
     }
 }
 
-function getCookie(name) {
-    var nameEQ = name + "=";
-    var ca = document.cookie.split(';');
-    for(var i=0;i < ca.length;i++) {
-        var c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1,c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-    }
-    return null;
-}
-
-class Homapage extends React.Component{
+class Register extends React.Component{
 
     constructor(props) {
         super(props);
         this.state = {
-            text: '',
+            email: '',
+            password: ''
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -208,142 +195,92 @@ class Homapage extends React.Component{
     handleInputChange(event, name, value) 
     {
         const target = event.target;
+        // const value = target.type === 'checkbox' ? target.checked : target.value;
+        // const name = target.name;
+        //alert(`target = ${target}, name = ${name}, value = ${value}`)
         this.setState({
             [name]: value
         });
     }
 
-    async fetch_posts() {
-        const email = "admin@gmail.com";
-        
-		const response = await fetch('http://localhost:2718/api/post/user_posts' , 
-							{
-                                method:'POST', 
-							    body: JSON.stringify({
-                                    email: email,
-                                }), 
-						        headers: {
-                                        'Content-Type': 'application/json',
-                                        'Authorization': `Bearer ${getCookie("token")}`
-                                    }
-                            });
-                             
-		if ( response.status == 200 )
-		{
-            const responseJson = await response.json();   
-            return responseJson;
-		}
-
-        return [];
-    }
-
     async componentDidMount() 
 	{
-		const posts = await this.fetch_posts();
-		//this.update_list(users);
+		eraseCookie("token");
 	}
 
     async handle_submit(event)
 	{
         event.preventDefault();
 
-		const username = this.state.username;
+		const email = this.state.email;
         const password = this.state.password;
+
+        alert( `email = ${email}` )
         
-		const response = await fetch('http://localhost:2718/api/users/send_message' , 
+		const response = await fetch('http://localhost:2718/api/users/login' , 
 							{
                                 method:'POST', 
-							    body: JSON.stringify({
-                                    text: username,
-                                    to: password,
-                                    send_all: false
+							    body: JSON.stringify( {
+                                    email: email,
+                                    password: password
                                 }), 
-						        headers: {
-                                     'Content-Type': 'application/json',
-
-                                    }
+						        headers: { 'Content-Type': 'application/json' }
                             });
                              
 		if ( response.status == 200 )
 		{
             const responseJson = await response.json();   
             setCookie("token", responseJson.token, 3);
+            window.location.href = "homepage.html"
 		}
+		// else 
+		// {
+		//   const err = await response.text();
+		//   alert( err );
+		// }
 	}
 
-    render() 
+    render()
     {
-
-        const POSTS_STUB = [
-            {
-                id: 1,
-                email: "alex@gmail.com",
-                text: "first post"
-            },
-            {
-                id: 2,
-                email: "alex@gmail.com",
-                text: "second post"
-            },
-            {
-                id: 3,
-                email: "alex@gmail.com",
-                text: "Smoked two joints in the morning"
-            },
-            {
-                id: 4,
-                email: "dudi@gmail.com",
-                text: "Smoked two joints at night"
-            },
-            {
-                id: 5,
-                email: "dudi@gmail.com",
-                text: "Fresh pasta 50 cents. BUY NOW?!@#!@$!@"
-            },
-            {
-                id: 6,
-                email: "africa@gmail.com",
-                text: "KISS KISS"
-            },
-        ]
-
         return (
             <div>
-                <header className="main-header">
-                    <button
+                <MainHeader>
+                    <Button
                         className="main-navigation__menu-btn"
                     >
                     <span />
                     <span />
                     <span />
-                    </button>
+                    </Button>
                     <nav className="main-navigation__header-nav">
                         <NavLinks />
                     </nav>
-                </header>
-                <div className="posts">
-                    <h2>Create new post</h2>
-                    <Card className="place-form">
-                        <form onSubmit={this.handle_submit}>
+                </MainHeader>
+                <Card className="authentication">
+                    <form className="login_form" onSubmit={this.handle_submit}>
+                        <h1>Register Form</h1>
+                        <div>
                             <Input 
-                                element='textarea' 
+                                element='input' 
                                 type='text' 
-                                name='text' 
-                                value={this.state.text} 
-                                label='Add your post here' 
+                                name='email' 
+                                value={this.state.email} 
+                                label='Email' 
                                 onChange={this.handleInputChange}>
                             </Input>
-                            <Button className='login_button' type="submit">SUBMIT</Button>
-                        </form>
-                    </Card>
-                    <h2>Recent posts</h2>
-                    {POSTS_STUB.map(post => (
-                        <Card className="place-form">
-                            <h3>{post.email}</h3>
-                            <p>{post.text}</p>
-                        </Card>
-                    ))}
-                </div>
+                        </div>
+                        <span />
+                        <span />
+                        <span />
+                        <div>
+                            <Input element='input' type='text' name='password' value={this.state.password} label='Password' onChange={this.handleInputChange}></Input> 
+                        </div>
+                        <span />
+                        <span />
+                        <span />                      
+                        <Button className='login_button' type="submit">JOIN REQUEST</Button>
+                    </form>
+                </Card>
             </div>
         )
     }
