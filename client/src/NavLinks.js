@@ -25,6 +25,7 @@ class NavLinks extends React.Component {
         this.open_about_handler = this.open_about_handler.bind(this);
         this.open_homepage_handler = this.open_homepage_handler.bind(this);
         this.open_messages_handler = this.open_messages_handler.bind(this);
+        this.open_admin_handler = this.open_admin_handler.bind(this);
     }
 
     open_login_handler() {
@@ -45,6 +46,10 @@ class NavLinks extends React.Component {
 
     open_messages_handler() {
         window.location.href = "messages.html"
+    }
+
+    open_admin_handler() {
+        window.location.href = "admin.html"
     }
 
     // async componentDidMount() 
@@ -84,6 +89,12 @@ class NavLinks extends React.Component {
                 <li>
                     <Button type='link' onClick={this.open_about_handler}>About</Button>
                 </li>
+
+                {this.props.isLoggedIn &&
+                <li>
+                    <Button type='link' onClick={this.open_admin_handler}>Admin</Button>
+                </li>
+                }
             </ul>
         )
     }

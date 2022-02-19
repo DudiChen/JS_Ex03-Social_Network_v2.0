@@ -52,10 +52,7 @@ class Homapage extends React.Component{
         return [];
     }
 
-    async check_new_posts(event) {
-
-        event.preventDefault();
-        
+    async check_new_posts() {
         const latestDateTime = this.state.all_posts[0].creation_date;
 
 		const response = await fetch('http://localhost:2718/api/post/check_for_new_posts' , 
@@ -100,15 +97,19 @@ class Homapage extends React.Component{
 		}
     }
 
-    async componentDidMount() 
+    async componentDidMount(event) 
 	{
 		let posts = await this.fetch_posts();
         this.setState({
             ["all_posts"]: posts
         });
-        this.interval = setInterval(() => {
-            
-        }, 1000);
+        alert(`${window.isAdmin}`)
+        if(window.isAdmin) {
+            alert("yay")
+        }
+        // this.interval = setInterval(() => {
+        //     this.check_new_posts(event);
+        // }, 10000);
 		//this.update_list(users);
 	}
 
@@ -146,40 +147,6 @@ class Homapage extends React.Component{
 
     render() 
     {
-
-        const POSTS_STUB = [
-            {
-                id: 1,
-                email: "alex@gmail.com",
-                text: "first post"
-            },
-            {
-                id: 2,
-                email: "alex@gmail.com",
-                text: "second post"
-            },
-            {
-                id: 3,
-                email: "alex@gmail.com",
-                text: "Smoked two joints in the morning"
-            },
-            {
-                id: 4,
-                email: "dudi@gmail.com",
-                text: "Smoked two joints at night"
-            },
-            {
-                id: 5,
-                email: "dudi@gmail.com",
-                text: "Fresh pasta 50 cents. BUY NOW?!@#!@$!@"
-            },
-            {
-                id: 6,
-                email: "africa@gmail.com",
-                text: "KISS KISS"
-            },
-        ]
-
         return (
             <div>
                 <header className="main-header">
