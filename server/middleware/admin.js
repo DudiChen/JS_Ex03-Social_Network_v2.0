@@ -1,6 +1,6 @@
 
 const is_admin = (req, res, next) => {
-    req.user.is_admin = user.id == 1;
+    req.user.is_admin = req.user.id == 1;
     next();
 }
 
