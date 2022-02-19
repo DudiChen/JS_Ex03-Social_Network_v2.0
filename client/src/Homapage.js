@@ -15,6 +15,7 @@ class Homapage extends React.Component{
         super(props);
         this.state = {
             text: '',
+            all_posts: []
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -32,12 +33,9 @@ class Homapage extends React.Component{
     async fetch_posts() {
         const email = "admin@gmail.com";
         
-		const response = await fetch('http://localhost:2718/api/post/user_posts' , 
+		const response = await fetch('http://localhost:2718/api/post/get_all_posts' , 
 							{
-                                method:'POST', 
-							    body: JSON.stringify({
-                                    email: email,
-                                }), 
+                                method:'GET', 
 						        headers: {
                                         'Content-Type': 'application/json',
                                         'Authorization': `Bearer ${getCookie("token")}`
@@ -56,6 +54,7 @@ class Homapage extends React.Component{
     async componentDidMount() 
 	{
 		const posts = await this.fetch_posts();
+        this.state.all_posts = posts;
 		//this.update_list(users);
 	}
 
@@ -153,7 +152,7 @@ class Homapage extends React.Component{
                         </form>
                     </Card>
                     <h2>Recent posts</h2>
-                    {POSTS_STUB.map(post => (
+                    {this.state.all_posts.map(post => (
                         <Card className="place-form">
                             <h3>{post.email}</h3>
                             <p>{post.text}</p>
