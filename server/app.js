@@ -46,7 +46,11 @@ router.get('/users/get_all_users', auth, api_content, (req, res) => { users.get_
 router.put('/users/change_user_status', auth, api_content, (req, res) => { users.change_user_status(req, res)});
 router.put('/users/get_user_latest_post', auth, api_content, (req, res) => { users.get_user_latest_post(req, res)});
 router.get('/users/get_all_created_users', auth, api_content, (req, res) => { users.get_all_created_users(req, res )  } );//
+
 router.post('/message/send_message', auth, api_content, (req, res) => { message.send_message(req, res )  } );//
+router.get('/message/get_all_messages', auth, api_content, (req, res) => { message.get_all_messages(req, res )  } );//
+router.get('/message/check_for_new_messages', auth, api_content, (req, res) => { message.check_for_new_messages(req, res )  } ); //)
+
 router.get('/post/get_all_posts', auth, api_content, (req, res) => { post.get_all_posts(req, res )  } );//
 router.post('/post/user_posts', api_content, (req, res) => { post.find_user_posts(req, res) } ); //
 router.post('/post/send_post', auth, api_content, (req, res) => { post.create_post(req, res )  } ); //
