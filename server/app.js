@@ -5,6 +5,7 @@ const message = require('./src/message.js');
 const post = require('./src/post.js');
 const auth = require("./middleware/auth");
 const api_content = require('./middleware/api_content');
+const admin_mw = require('./middleware/admin');
 const client_content = require('./middleware/client_content')
 const database = require('./config/database');
 const { route } = require('express/lib/router');
@@ -39,9 +40,12 @@ router.post("/welcome", (req, res) => {
   res.status(200).send("Welcome 🙌 ");
 });
 
+
 router.post('/users/register', api_content, (req, res) => { users.register(req, res )  } ); //
 router.post('/users/login', api_content, (req, res) => { users.login(req, res )  } ); //
 router.delete('/users/logout', auth, api_content, (req, res) => { users.logout(req, res)  } );
+
+router.get('/users/is_admin',auth, admin_mw, api_content, (req, res) => { users.is_admin(req, res )  } );
 router.get('/users/get_all_users', auth, api_content, (req, res) => { users.get_all_users(req, res )  } );//
 router.put('/users/change_user_status', auth, api_content, (req, res) => { users.change_user_status(req, res)});
 router.put('/users/get_user_latest_post', auth, api_content, (req, res) => { users.get_user_latest_post(req, res)});
