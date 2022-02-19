@@ -25,7 +25,7 @@ function register(request, response){
         response.send('All inputs required!');
     }
 
-    else if(database.find_one(email.toLowerCase()) !== null)
+    else if(database.match_email_to_user(email.toLowerCase()) !== null)
     {
         response.status(StatusCodes.CONFLICT);
         response.send("User Already Exist. Please Login");
@@ -54,7 +54,7 @@ const login = (request, response) =>{
         response.send("All input is required");
     }
 
-    const user = database.find_one(email.toLowerCase());
+    const user = database.match_email_to_user(email.toLowerCase());
     if(user && (bcrypt.compare(password, user.password)))
     {
         if(user.status === 'active'){
@@ -96,7 +96,7 @@ const logout = (request, response) =>{
         response.status(StatusCodes.OK);
         response.send(`Bye bye`);
     }
-}
+};
 
 //function return json of all users array (if is admin authentication)
 const get_all_users = (request, response) =>{
@@ -112,12 +112,12 @@ const get_all_users = (request, response) =>{
 };
 
 
-const get_all_request = (request, response) =>{
+const get_all_created_users = (request, response) =>{
 
     if(request.user.id === 1)
     {
         response.status(StatusCodes.OK);
-        response.send(JSON.stringify(database.get_request()));
+        response.send(JSON.stringify(database.get_all_created_users()));
     }
     else{
         response.status(StatusCodes.UNAUTHORIZED);
@@ -133,8 +133,8 @@ const change_user_status = (request, response) =>{
         const new_status = request.body.status;
         if(new_status === 'active' || new_status === 'suspended' || new_status === 'deleted')
         {
-            const user_to_change = database.find_one(request.body.email.toLowerCase());
-            
+            const user_to_change = database.match_email_to_user(request.body.email.toLowerCase());
+
             if(user_to_change !== null && user_to_change.obj_id !== 1 && user_to_change.status !== 'deleted')
             {
                 user_to_change.status = new_status;
@@ -157,4 +157,16 @@ const change_user_status = (request, response) =>{
     }
 };
 
-module.exports = {logout, register, login, change_user_status, get_all_request, get_all_users};
+const get_user_latest_post = (request, response) => {
+    const email = request.user.name;
+    if (!email) {
+        const latest_post = database.get_all_user_posts(email);
+        response.send(JSON.stringify(latest_post));
+    }
+    else {
+        response.status(StatusCodes.BAD_REQUEST);
+        response.send('Invalid status');
+    }
+};
+
+module.exports = {logout, register, login, change_user_status, get_all_created_users, get_all_users, get_user_latest_post};
