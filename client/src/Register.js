@@ -3,6 +3,7 @@ class Register extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
+            full_name: '',
             email: '',
             password: ''
         };
@@ -22,24 +23,19 @@ class Register extends React.Component{
         });
     }
 
-    async componentDidMount() 
-	{
-		eraseCookie("token");
-	}
-
     async handle_submit(event)
 	{
         event.preventDefault();
 
+        const full_name = this.state.full_name;
 		const email = this.state.email;
         const password = this.state.password;
 
-        alert( `email = ${email}` )
-        
-		const response = await fetch('http://localhost:2718/api/users/login' , 
+		const response = await fetch('http://localhost:2718/api/users/register' , 
 							{
                                 method:'POST', 
 							    body: JSON.stringify( {
+                                    full_name: full_name,
                                     email: email,
                                     password: password
                                 }), 
@@ -78,6 +74,19 @@ class Register extends React.Component{
                 <Card className="authentication">
                     <form className="login_form" onSubmit={this.handle_submit}>
                         <h1>Register Form</h1>
+                        <div>
+                            <Input 
+                                element='input' 
+                                type='text' 
+                                name='full_name' 
+                                value={this.state.full_name} 
+                                label='Full name' 
+                                onChange={this.handleInputChange}>
+                            </Input>
+                        </div>
+                        <span />
+                        <span />
+                        <span />
                         <div>
                             <Input 
                                 element='input' 

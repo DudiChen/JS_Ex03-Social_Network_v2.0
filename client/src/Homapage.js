@@ -103,10 +103,6 @@ class Homapage extends React.Component{
         this.setState({
             ["all_posts"]: posts
         });
-        alert(`${window.isAdmin}`)
-        if(window.isAdmin) {
-            alert("yay")
-        }
         // this.interval = setInterval(() => {
         //     this.check_new_posts(event);
         // }, 10000);

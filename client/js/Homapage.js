@@ -95,10 +95,6 @@ class Homapage extends React.Component {
         this.setState({
             ["all_posts"]: posts
         });
-        alert(`${window.isAdmin}`);
-        if (window.isAdmin) {
-            alert("yay");
-        }
         // this.interval = setInterval(() => {
         //     this.check_new_posts(event);
         // }, 10000);
@@ -135,33 +131,6 @@ class Homapage extends React.Component {
     }
 
     render() {
-
-        const POSTS_STUB = [{
-            id: 1,
-            email: "alex@gmail.com",
-            text: "first post"
-        }, {
-            id: 2,
-            email: "alex@gmail.com",
-            text: "second post"
-        }, {
-            id: 3,
-            email: "alex@gmail.com",
-            text: "Smoked two joints in the morning"
-        }, {
-            id: 4,
-            email: "dudi@gmail.com",
-            text: "Smoked two joints at night"
-        }, {
-            id: 5,
-            email: "dudi@gmail.com",
-            text: "Fresh pasta 50 cents. BUY NOW?!@#!@$!@"
-        }, {
-            id: 6,
-            email: "africa@gmail.com",
-            text: "KISS KISS"
-        }];
-
         return React.createElement(
             'div',
             null,
