@@ -21,12 +21,9 @@ class Messages extends React.Component{
     async fetch_posts() {
         const email = "admin@gmail.com";
         
-		const response = await fetch('http://localhost:2718/api/post/user_posts' , 
+		const response = await fetch('http://localhost:2718/api/message/get_all_messages' , 
 							{
-                                method:'POST', 
-							    body: JSON.stringify({
-                                    email: email,
-                                }), 
+                                method:'GET', 
 						        headers: {
                                         'Content-Type': 'application/json',
                                         'Authorization': `Bearer ${getCookie("token")}`
@@ -35,7 +32,7 @@ class Messages extends React.Component{
                              
 		if ( response.status == 200 )
 		{
-            const responseJson = await response.json();   
+            const responseJson = await response.json();
             return responseJson;
 		}
 

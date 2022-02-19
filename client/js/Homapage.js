@@ -20,6 +20,7 @@ class Homapage extends React.Component {
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handle_submit = this.handle_submit.bind(this);
+        this.submit_new_post = this.submit_new_post.bind(this);
     }
 
     handleInputChange(event, name, value) {
@@ -48,8 +49,33 @@ class Homapage extends React.Component {
         return [];
     }
 
+    async submit_new_post(event) {
+
+        event.preventDefault();
+
+        const text = this.state.text;
+
+        const response = await fetch('http://localhost:2718/api/post/send_post', {
+            method: 'POST',
+            body: JSON.stringify({
+                text: text
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${getCookie("token")}`
+            }
+        });
+
+        if (response.status == 200) {
+            alert("post sent!");
+        }
+    }
+
     async componentDidMount() {
-        this.state.all_posts = await this.fetch_posts();
+        let posts = await this.fetch_posts();
+        this.setState({
+            ["all_posts"]: posts
+        });
         //this.update_list(users);
     }
 
@@ -140,7 +166,7 @@ class Homapage extends React.Component {
                     { className: 'place-form' },
                     React.createElement(
                         'form',
-                        { onSubmit: this.handle_submit },
+                        { onSubmit: this.submit_new_post },
                         React.createElement(Input, {
                             element: 'textarea',
                             type: 'text',
