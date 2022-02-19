@@ -29,7 +29,7 @@ class Login extends React.Component{
         super(props);
         this.state = {
             email: 'admin@gmail.com',
-            password: '12345678'
+            password: '12345678',
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -50,10 +50,8 @@ class Login extends React.Component{
     async componentDidMount() 
 	{
 		eraseCookie("token");
-        const script = document.createElement("script");
-        script.src = "../js/Card.js";
-        script.async = true;
-        document.body.appendChild(script);
+        setCookie("isAdmin", false, 3);
+        setCookie("isLoggedIn", false, 3);
 	}
 
     async handle_submit(event)
@@ -79,6 +77,9 @@ class Login extends React.Component{
 		{
             const responseJson = await response.json();   
             setCookie("token", responseJson.token, 3);
+            setCookie("isAdmin", false, 3);
+            setCookie("isLoggedIn", true, 3);
+
             window.location.href = "homepage.html"
 		}
 		// else 
@@ -100,7 +101,7 @@ class Login extends React.Component{
                         <img src="img/icon.jpg"/>
                     </Button>
                     <nav className="main-navigation__header-nav">
-                        <NavLinks />
+                        <NavLinks/>
                     </nav>
                 </MainHeader>
                 <Card className="authentication">
