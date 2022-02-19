@@ -70,7 +70,13 @@ const login = (request, response) =>{
                 database.remove_validation_token(token);
             }, 600000);
             response.status(StatusCodes.OK);
-            response.send(JSON.stringify({token: token}));
+            res_json = {
+                token: token,
+                is_admin: user.obj_id == 1,
+                id: user.obj_id
+            }
+            // response.send(JSON.stringify({token: token}));
+            response.send(JSON.stringify(res_json));
         }else{
             response.status(StatusCodes.BAD_REQUEST);
             response.send("Your account has not yet been activated");
@@ -97,6 +103,11 @@ const logout = (request, response) =>{
         response.send(`Bye bye`);
     }
 };
+
+
+const is_admin = (request, response) => {
+    response.send(JSON.stringify(request.user.is_admin));
+}
 
 //function return json of all users array (if is admin authentication)
 const get_all_users = (request, response) =>{
@@ -169,4 +180,4 @@ const get_user_latest_post = (request, response) => {
     }
 };
 
-module.exports = {logout, register, login, change_user_status, get_all_created_users, get_all_users, get_user_latest_post};
+module.exports = {logout, register, login, change_user_status, get_all_created_users, get_all_users, get_user_latest_post, is_admin};
