@@ -3,8 +3,7 @@ class Admin extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            email: '',
-            password: ''
+            all_users: []
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -21,8 +20,30 @@ class Admin extends React.Component {
         });
     }
 
+    async fetch_users() {
+        const email = "admin@gmail.com";
+
+        const response = await fetch('http://localhost:2718/api/users/get_all_users', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${getCookie("token")}`
+            }
+        });
+
+        if (response.status == 200) {
+            const responseJson = await response.json();
+            return responseJson;
+        }
+
+        return [];
+    }
+
     async componentDidMount() {
-        eraseCookie("token");
+        let users = await this.fetch_users();
+        this.setState({
+            ["all_users"]: users
+        });
     }
 
     async handle_submit(event) {
@@ -110,18 +131,18 @@ class Admin extends React.Component {
                     null,
                     'Pending users for approval'
                 ),
-                POSTS_STUB.map(post => React.createElement(
+                this.state.all_users.map(user => React.createElement(
                     Card,
                     { className: 'place-form' },
                     React.createElement(
                         'h3',
                         null,
-                        post.email
+                        user.email
                     ),
                     React.createElement(
                         'h3',
                         null,
-                        post.usrename
+                        user.full_name
                     ),
                     React.createElement(
                         Button,

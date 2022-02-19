@@ -3,8 +3,7 @@ class Admin extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            email: '',
-            password: ''
+            all_users: [],
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -22,15 +21,10 @@ class Admin extends React.Component{
         });
     }
 
-    async componentDidMount() 
-	{
-		eraseCookie("token");
-	}
-
     async fetch_users() {
         const email = "admin@gmail.com";
         
-		const response = await fetch('http://localhost:2718/api/post/get_all_posts' , 
+		const response = await fetch('http://localhost:2718/api/users/get_all_users' , 
 							{
                                 method:'GET', 
 						        headers: {
@@ -47,6 +41,14 @@ class Admin extends React.Component{
 
         return [];
     }
+
+    async componentDidMount() 
+	{
+		let users = await this.fetch_users();
+        this.setState({
+            ["all_users"]: users
+        });
+	}
 
     async handle_submit(event)
 	{
@@ -131,11 +133,11 @@ class Admin extends React.Component{
                 </MainHeader>
                 <div className="posts">
                     <h2>Pending users for approval</h2>
-                    {POSTS_STUB.map(post => (
+                    {this.state.all_users.map(user => (
                         <Card className="place-form">
                             {/* <h3>{post.email}</h3> */}
-                            <h3>{post.email}</h3>
-                            <h3>{post.usrename}</h3>
+                            <h3>{user.email}</h3>
+                            <h3>{user.full_name}</h3>
                             <Button className='approve-button' type="submit">APPROVE</Button>
                         </Card>
                     ))}
