@@ -4,10 +4,12 @@ class Messages extends React.Component{
         super(props);
         this.state = {
             text: '',
+            all_messages: []
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handle_submit = this.handle_submit.bind(this);
+        this.fetch_messages = this.fetch_messages.bind(this);
     }
 
     handleInputChange(event, name, value) 
@@ -18,9 +20,7 @@ class Messages extends React.Component{
         });
     }
 
-    async fetch_posts() {
-        const email = "admin@gmail.com";
-        
+    async fetch_messages() {
 		const response = await fetch('http://localhost:2718/api/message/get_all_messages' , 
 							{
                                 method:'GET', 
@@ -41,8 +41,10 @@ class Messages extends React.Component{
 
     async componentDidMount() 
 	{
-		const posts = await this.fetch_posts();
-		//this.update_list(users);
+		let messages = await this.fetch_messages();
+        this.setState({
+            ["all_messages"]: messages
+        });
 	}
 
     async handle_submit(event)
@@ -139,7 +141,7 @@ class Messages extends React.Component{
                         </form>
                     </Card>
                     <h2>Your messages</h2>
-                    {MESSAGES_STUB.map(post => (
+                    {this.state.all_messages.map(post => (
                         <Card className="place-form">
                             <h3>{post.email}</h3>
                             <p>{post.text}</p>

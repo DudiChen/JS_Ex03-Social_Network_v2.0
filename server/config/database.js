@@ -153,7 +153,7 @@ const remove_validation_token = (token) =>{
 };
 
 const compare_posts = (post1, post2) => Date.parse(post1.creation_date) > Date.parse(post2.creation_date) ? 1 : -1;
-const compare_messages = (msg1, msg2) => Date.parse(msg1.creation_date) > Date.parse(post2.creation_date) ? 1 : -1;
+const compare_messages = (msg1, msg2) => Date.parse(msg1.creation_date) > Date.parse(msg2.creation_date) ? 1 : -1;
 
 
 // module.exports = {check_token, remove_validation_token, add_validation_token, get_all_created_users, add_new_user, read_all_database, write_all_users, get_all_users, get_messages_counter, get_users_counter, get_posts_counter, match_email_to_user, get_user_by_id, write_all_posts, add_new_post, get_all_posts}

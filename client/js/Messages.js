@@ -3,11 +3,13 @@ class Messages extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            text: ''
+            text: '',
+            all_messages: []
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handle_submit = this.handle_submit.bind(this);
+        this.fetch_messages = this.fetch_messages.bind(this);
     }
 
     handleInputChange(event, name, value) {
@@ -17,14 +19,9 @@ class Messages extends React.Component {
         });
     }
 
-    async fetch_posts() {
-        const email = "admin@gmail.com";
-
-        const response = await fetch('http://localhost:2718/api/post/user_posts', {
-            method: 'POST',
-            body: JSON.stringify({
-                email: email
-            }),
+    async fetch_messages() {
+        const response = await fetch('http://localhost:2718/api/message/get_all_messages', {
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${getCookie("token")}`
@@ -40,8 +37,10 @@ class Messages extends React.Component {
     }
 
     async componentDidMount() {
-        const posts = await this.fetch_posts();
-        //this.update_list(users);
+        let messages = await this.fetch_messages();
+        this.setState({
+            ["all_messages"]: messages
+        });
     }
 
     async handle_submit(event) {
@@ -151,7 +150,7 @@ class Messages extends React.Component {
                     null,
                     'Your messages'
                 ),
-                MESSAGES_STUB.map(post => React.createElement(
+                this.state.all_messages.map(post => React.createElement(
                     Card,
                     { className: 'place-form' },
                     React.createElement(

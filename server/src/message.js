@@ -125,7 +125,8 @@ const delete_message = (request, response) =>{
 const get_all_user_messages = (request, response) =>
 {
     email = request.user.name;
-    return database.get_all_user_messages(email);
+    messages = database.get_all_user_messages(email);
+    response.send(JSON.stringify(messages));
 }
 
 const check_for_new_messages = (request, response) => {
