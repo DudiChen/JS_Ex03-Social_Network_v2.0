@@ -4,6 +4,7 @@ class Messages extends React.Component{
         super(props);
         this.state = {
             text: '',
+            to: '',
             all_messages: []
         };
 
@@ -51,27 +52,27 @@ class Messages extends React.Component{
 	{
         event.preventDefault();
 
-		const username = this.state.username;
-        const password = this.state.password;
+		const to = this.state.to;
+        const text = this.state.text;
         
-		const response = await fetch('http://localhost:2718/api/users/send_message' , 
+		const response = await fetch('http://localhost:2718/api/message/send_message' , 
 							{
                                 method:'POST', 
 							    body: JSON.stringify({
-                                    text: username,
-                                    to: password,
-                                    send_all: false
+                                    text: text,
+                                    to: to,
+                                    send_all: "false"
                                 }), 
 						        headers: {
-                                     'Content-Type': 'application/json',
-
-                                    }
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${getCookie("token")}`
+                                }
                             });
                              
 		if ( response.status == 200 )
 		{
-            const responseJson = await response.json();   
-            setCookie("token", responseJson.token, 3);
+            const responseJson = await response.json();
+            alert("message sent!")   
 		}
 	}
 
@@ -130,11 +131,19 @@ class Messages extends React.Component{
                     <Card className="message-form">
                         <form onSubmit={this.handle_submit}>
                             <Input 
+                                element='input' 
+                                type='text' 
+                                name='to' 
+                                value={this.state.to} 
+                                label='Recipient email' 
+                                onChange={this.handleInputChange}>
+                            </Input>
+                            <Input 
                                 element='textarea' 
                                 type='text' 
                                 name='text' 
                                 value={this.state.text} 
-                                label='Add your post here' 
+                                label='Message content' 
                                 onChange={this.handleInputChange}>
                             </Input>
                             <Button className='login_button' type="submit">SUBMIT</Button>
