@@ -14,5 +14,3 @@ class Card extends React.Component {
         );
     }
 }
-
-export { Card }

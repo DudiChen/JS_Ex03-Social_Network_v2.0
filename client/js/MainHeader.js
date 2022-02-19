@@ -1,5 +1,4 @@
-
-class Card extends React.Component {
+class MainHeader extends React.Component {
 
     constructor(props) {
         super(props);
@@ -7,8 +6,8 @@ class Card extends React.Component {
 
     render() {
         return React.createElement(
-            "div",
-            { className: `card ${this.props.className}`, style: this.props.style },
+            "header",
+            { className: "main-header" },
             this.props.children
         );
     }

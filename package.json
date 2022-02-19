@@ -208,7 +208,8 @@
   },
   "scripts": {
     "start": "node ./server/app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --entry ./client/js/Login.js --output-filename ./bundle.js"
   },
   "repository": {
     "type": "git",
@@ -222,6 +223,8 @@
   "homepage": "https://github.com/DudiChen/JS_Ex03-Social_Network_v2.0#readme",
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "babel-preset-react": "^6.24.1"
+    "babel-preset-react": "^6.24.1",
+    "webpack": "^5.69.1",
+    "webpack-cli": "^4.9.2"
   }
 }
