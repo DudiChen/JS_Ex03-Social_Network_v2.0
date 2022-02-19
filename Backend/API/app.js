@@ -59,10 +59,13 @@ router.post('/users/login', (req, res) => { users.login(req, res )  } ); //
 router.delete('/users/logout', auth, (req, res) => { users.logout(req, res)  } );
 router.get('/users/get_all_users', auth, (req, res) => { users.get_all_users(req, res )  } );//
 router.put('/users/change_user_status', auth, (req, res) => { users.change_user_status(req, res)});
-router.get('/users/get_all_request', auth, (req, res) => { users.get_all_request(req, res )  } );//
+router.put('/users/get_user_latest_post', auth, (req, res) => { users.get_user_latest_post(req, res)});
+router.get('/users/get_all_created_users', auth, (req, res) => { users.get_all_created_users(req, res )  } );//
 router.post('/message/send_message', auth, (req, res) => { message.send_message(req, res )  } );//
+router.get('/post/get_all_posts', auth, (req, res) => { post.get_all_posts(req, res )  } );//
 router.post('/post/user_posts', (req, res) => { post.find_user_posts(req, res) } ); //
 router.post('/post/send_post', auth, (req, res) => { post.create_post(req, res )  } ); //
+router.get('/post/check_for_new_posts', auth, (req, res) => { post.check_for_new_posts(req, res )  } ); //)
 router.delete('/post/delete_post', auth, (req, res) => { post.delete_post(req, res )  } );//
 router.delete('/post/delete_post_admin', auth, (req, res) => { post.delete_post_admin(req, res )  } );//
 

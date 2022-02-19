@@ -6,7 +6,7 @@ const StatusCodes = require('http-status-codes').StatusCodes;
 function Post(text){
     this.text = text;
     this.obj_id = database.get_posts_counter();
-    this.creation_date = new Date();
+    this.creation_date = new Date().toLocaleString();
 }
 
 //function create new post and add it to the user posts array
@@ -17,7 +17,7 @@ const create_post = (request, response) =>{
     if(text !== ''){
         const post = new Post(text); 
 
-        const user = database.find_one(request.user.name);
+        const user = database.match_email_to_user(request.user.name);
         if(user !== null && user.status === 'active'){
             user.posts.push(post);
             database.write_all_users();
@@ -41,7 +41,7 @@ const find_user_posts = (request, response) =>{
     const email = request.body.email.toLowerCase();
     
     if(email !== ''){
-        const user = database.find_one(email);
+        const user = database.match_email_to_user(email);
     
         if(user === null)
         {
@@ -57,6 +57,26 @@ const find_user_posts = (request, response) =>{
         response.status(StatusCodes.BAD_REQUEST);
         response.send('User email require.');
     }
+};
+
+const check_for_new_posts = (request, response) => {
+    const timestamp = request.body.timestamp;
+    if (!timestamp) {
+        const time_to_check = new Date.parse(timestamp).getTime();
+        const all_posts = database.get_all_posts();
+        const latest_post = all_posts[all_posts.length - 1];
+        result = time_to_check < new Date.parse(latest_post.creation_date).getTime();
+        response.send(JSON.stringify(result));
+    }
+    else {
+        response.status(StatusCodes.BAD_REQUEST);
+        response.send('Input require; missing timestamp!');
+    }
+};
+
+const get_all_posts = (request, response) => {
+    all_posts = database.get_all_posts();
+    response.send(JSON.stringify(all_posts));
 };
 
 const get_post_index = (post_id, user) =>{
@@ -81,7 +101,7 @@ const delete_post_admin = (request, response) =>{
             response.send('Inputs required.'); 
         }
         else{
-            const user = database.find_one(email.toLowerCase());
+            const user = database.match_email_to_user(email.toLowerCase());
             if(user !== null){
                 const post_index = get_post_index(post_id, user);
                 if(post_index === -1)
@@ -113,8 +133,7 @@ const delete_post_admin = (request, response) =>{
 const delete_post = (request, response) =>{
     const post_id = request.body.obj_id;
     if(post_id !== null){
-
-        const user = database.find_one(request.user.name);
+        const user = database.match_email_to_user(request.user.name);
         const post_index = get_post_index(post_id, user);
 
         if(post_index === -1)
@@ -137,4 +156,4 @@ const delete_post = (request, response) =>{
     }
 };
 
-module.exports = {delete_post_admin, delete_post, find_user_posts, create_post};
+module.exports = {delete_post_admin, delete_post, find_user_posts, create_post, get_all_posts, check_for_new_posts};

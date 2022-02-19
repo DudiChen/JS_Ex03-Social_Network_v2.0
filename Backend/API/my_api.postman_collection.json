@@ -540,7 +540,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:2718/api/users/get_all_request",
+					"raw": "localhost:2718/api/users/get_all_created_users",
 					"host": [
 						"localhost"
 					],
@@ -548,7 +548,7 @@
 					"path": [
 						"api",
 						"users",
-						"get_all_request"
+						"get_all_created_users"
 					]
 				}
 			},

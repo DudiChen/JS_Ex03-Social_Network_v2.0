@@ -25,7 +25,7 @@ const send_message = (request, response) =>{
         }
         else{
             if(request.body.to !== null){
-                let to_user = database.find_one(request.body.to.toLowerCase());
+                let to_user = database.match_email_to_user(request.body.to.toLowerCase());
                 if(to_user === null || to_user.status !== 'active'){
                     response.status(StatusCodes.NOT_FOUND);
                     response.send('Invalid destanation email.');
@@ -84,7 +84,7 @@ const delete_message = (request, response) =>{
     if(request.user.id === 1){
         if(request.body.email !== null){
 
-            const user = database.find_one(request.body.email.toLowerCase());
+            const user = database.match_email_to_user(request.body.email.toLowerCase());
 
             if(user !== null){
                 if(request.body.obj_id !== null){
