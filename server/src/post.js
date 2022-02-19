@@ -61,7 +61,7 @@ const find_user_posts = (request, response) =>{
 
 const check_for_new_posts = (request, response) => {
     const timestamp = request.body.timestamp;
-    if (!timestamp) {
+    if (timestamp) {
         const time_to_check = Date.parse(timestamp);
         const all_posts = database.get_all_posts();
         const latest_post = all_posts[all_posts.length - 1];
