@@ -44,11 +44,13 @@ router.get('/version', (req, res) => { get_version(req, res )  } );
 //     response.sendFile('C:\\Users\\alexl\\Documents\\JavaScript\\Assignment 3\\Backend\\API\\Frontend\\index.html');
 // });
 
-app.use('/Frontend', express.static(path.join(__dirname + '/Frontend')));
+app.use(express.static(path.join(__dirname + '../../../Frontend')));
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname + "/Frontend/index.html"));
-});
+// app.get("/", (req, res) => {
+//   res.sendFile(path.join(__dirname + "../../../Frontend/index.html"));
+// });
+
+app.get('/favicon.ico', (req, res) => res.status(204));
 
 router.post("/welcome", (req, res) => {
   res.status(200).send("Welcome 🙌 ");
