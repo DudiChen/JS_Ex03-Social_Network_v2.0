@@ -4,6 +4,8 @@ const users = require('./src/users.js');
 const message = require('./src/message.js');
 const post = require('./src/post.js');
 const auth = require("./middleware/auth");
+const api_content = require('./middleware/api_content');
+const client_content = require('./middleware/client_content')
 const database = require('./config/database');
 const { route } = require('express/lib/router');
 const path = require("path");
@@ -11,14 +13,6 @@ const path = require("path");
 const app = express()
 let  port = 2718;
 
-// General app settings
-const set_content_type = function (req, res, next) 
-{
-	res.setHeader("Content-Type", "application/json; charset=utf-8");
-	next()
-}
-
-app.use( set_content_type );
 app.use(express.json());  // to support JSON-encoded bodies
 app.use(express.urlencoded( // to support URL-encoded bodies
 {  
@@ -34,48 +28,34 @@ function get_version(req, res)
 
 //Routing
 const router = express.Router();
+const client_router = express.Router();
 
 database.read_all_database();
 
 //functionality
 router.get('/version', (req, res) => { get_version(req, res )  } );
 
-// app.get('/', function(request, response){
-//     response.sendFile('C:\\Users\\alexl\\Documents\\JavaScript\\Assignment 3\\Backend\\API\\Frontend\\index.html');
-// });
-
-app.use(express.static(path.join(__dirname , '../client')));
-//app.use(express.static('client'));
-
-// app.get("/", (req, res) => {
-//   res.sendFile(path.join(__dirname + "../../../Frontend/index.html"));
-// });
-
-// app.get('/favicon.ico', (req, res) => res.status(204));
-
 router.post("/welcome", (req, res) => {
   res.status(200).send("Welcome 🙌 ");
 });
-//router.post('/users/register', (req,res) => {register(req,res)});
-router.post('/users/register', (req, res) => { users.register(req, res )  } ); //
-router.post('/users/login', (req, res) => { users.login(req, res )  } ); //
-router.delete('/users/logout', auth, (req, res) => { users.logout(req, res)  } );
-router.get('/users/get_all_users', auth, (req, res) => { users.get_all_users(req, res )  } );//
-router.put('/users/change_user_status', auth, (req, res) => { users.change_user_status(req, res)});
-router.put('/users/get_user_latest_post', auth, (req, res) => { users.get_user_latest_post(req, res)});
-router.get('/users/get_all_created_users', auth, (req, res) => { users.get_all_created_users(req, res )  } );//
-router.post('/message/send_message', auth, (req, res) => { message.send_message(req, res )  } );//
-router.get('/post/get_all_posts', auth, (req, res) => { post.get_all_posts(req, res )  } );//
-router.post('/post/user_posts', (req, res) => { post.find_user_posts(req, res) } ); //
-router.post('/post/send_post', auth, (req, res) => { post.create_post(req, res )  } ); //
-router.get('/post/check_for_new_posts', auth, (req, res) => { post.check_for_new_posts(req, res )  } ); //)
-router.delete('/post/delete_post', auth, (req, res) => { post.delete_post(req, res )  } );//
-router.delete('/post/delete_post_admin', auth, (req, res) => { post.delete_post_admin(req, res )  } );//
+
+router.post('/users/register', api_content, (req, res) => { users.register(req, res )  } ); //
+router.post('/users/login', api_content, (req, res) => { users.login(req, res )  } ); //
+router.delete('/users/logout', auth, api_content, (req, res) => { users.logout(req, res)  } );
+router.get('/users/get_all_users', auth, api_content, (req, res) => { users.get_all_users(req, res )  } );//
+router.put('/users/change_user_status', auth, api_content, (req, res) => { users.change_user_status(req, res)});
+router.put('/users/get_user_latest_post', auth, api_content, (req, res) => { users.get_user_latest_post(req, res)});
+router.get('/users/get_all_created_users', auth, api_content, (req, res) => { users.get_all_created_users(req, res )  } );//
+router.post('/message/send_message', auth, api_content, (req, res) => { message.send_message(req, res )  } );//
+router.get('/post/get_all_posts', auth, api_content, (req, res) => { post.get_all_posts(req, res )  } );//
+router.post('/post/user_posts', api_content, (req, res) => { post.find_user_posts(req, res) } ); //
+router.post('/post/send_post', auth, api_content, (req, res) => { post.create_post(req, res )  } ); //
+router.get('/post/check_for_new_posts', auth, api_content, (req, res) => { post.check_for_new_posts(req, res )  } ); //)
+router.delete('/post/delete_post', auth, api_content, (req, res) => { post.delete_post(req, res )  } );//
+router.delete('/post/delete_post_admin', auth, api_content, (req, res) => { post.delete_post_admin(req, res )  } );//
 
 
-
-
-app.use((req, res, next) => {
+const set_headers = (req, res, next) => {
 	res.setHeader('Access-Control-Allow-Origin', '*');
 	res.setHeader(
 	  'Access-Control-Allow-Headers',
@@ -84,9 +64,19 @@ app.use((req, res, next) => {
 	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
 	res.setHeader('Content-Security-Policy', 'img-src \'self\'');	
 	next();
-  });
+  };
+
+app.use(set_headers);
+
+app.use(express.static(path.join(__dirname , '../client')));
+
+client_router.get('/', client_content, (req, res) => {
+	res.setHeader("Content-Type", "text/html");
+	res.render(path.join(__dirname, '../client/index.html'))
+});
 
 app.use('/api', router);
+app.use('', client_router);
 
 //init
 let msg = `${package.description} listening at port ${port}`
