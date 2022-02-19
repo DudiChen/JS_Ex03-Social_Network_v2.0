@@ -49,8 +49,7 @@ class Homapage extends React.Component {
     }
 
     async componentDidMount() {
-        const posts = await this.fetch_posts();
-        this.state.all_posts = posts;
+        this.state.all_posts = await this.fetch_posts();
         //this.update_list(users);
     }
 
@@ -167,12 +166,17 @@ class Homapage extends React.Component {
                     React.createElement(
                         'h3',
                         null,
-                        post.email
+                        "temp@email.com"
                     ),
                     React.createElement(
                         'p',
                         null,
                         post.text
+                    ),
+                    React.createElement(
+                        'p',
+                        null,
+                        post.creation_date
                     )
                 ))
             )

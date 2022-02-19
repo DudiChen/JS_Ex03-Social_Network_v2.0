@@ -44,7 +44,7 @@ class Homapage extends React.Component{
                              
 		if ( response.status == 200 )
 		{
-            const responseJson = await response.json();   
+            const responseJson = await response.json();
             return responseJson;
 		}
 
@@ -53,8 +53,7 @@ class Homapage extends React.Component{
 
     async componentDidMount() 
 	{
-		const posts = await this.fetch_posts();
-        this.state.all_posts = posts;
+		this.state.all_posts = await this.fetch_posts();
 		//this.update_list(users);
 	}
 
@@ -154,8 +153,10 @@ class Homapage extends React.Component{
                     <h2>Recent posts</h2>
                     {this.state.all_posts.map(post => (
                         <Card className="place-form">
-                            <h3>{post.email}</h3>
+                            {/* <h3>{post.email}</h3> */}
+                            <h3>{"temp@email.com"}</h3>
                             <p>{post.text}</p>
+                            <p>{post.creation_date}</p>
                         </Card>
                     ))}
                 </div>
