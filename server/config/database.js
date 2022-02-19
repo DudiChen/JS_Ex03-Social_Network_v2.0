@@ -41,6 +41,24 @@ function write_validation_token(){
     fs.writeFile('./server/config/validationTokens.json',JSON.stringify(validation_token));
 }
 
+function get_all_users(){
+    // return Object.values(users);
+    return users;
+};
+
+const get_users_list = () => {
+    return get_all_created_users()
+    .map(user => (
+        {
+            id: user.obj_id,
+            email: user.email,
+            full_name: user.full_name,
+            status: user.status,
+            creation_date: user.creation_date.toLocaleString()
+        }
+    ));
+}
+
 function get_all_created_users(){
     const filter_request = users.filter(user => user.status === 'active');
     return filter_request;
@@ -116,11 +134,6 @@ const get_messages_counter = () =>{
     return max_id;
 };
 
-function get_all_users(){
-    // return Object.values(users);
-    return users;
-};
-
 //function returns the user pointer in users array by compare the email parameter
 const match_email_to_user = (email) =>
 {
@@ -157,4 +170,4 @@ const compare_messages = (msg1, msg2) => Date.parse(msg1.creation_date) < Date.p
 
 
 // module.exports = {check_token, remove_validation_token, add_validation_token, get_all_created_users, add_new_user, read_all_database, write_all_users, get_all_users, get_messages_counter, get_users_counter, get_posts_counter, match_email_to_user, get_user_by_id, write_all_posts, add_new_post, get_all_posts}
-module.exports = {check_token, remove_validation_token, add_validation_token, get_all_created_users, add_new_user, read_all_database, write_all_users, get_all_users, get_messages_counter, get_users_counter, get_posts_counter, match_email_to_user, get_all_posts, get_user_latest_post, get_all_user_messages}
+module.exports = {check_token, remove_validation_token, add_validation_token, get_all_created_users, add_new_user, read_all_database, write_all_users, get_all_users, get_messages_counter, get_users_counter, get_posts_counter, match_email_to_user, get_all_posts, get_user_latest_post, get_users_list, get_all_user_messages}

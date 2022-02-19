@@ -107,7 +107,7 @@ const get_all_users = (request, response) =>{
         response.send('This user is unauthorized to see all users info');
     }
     else{
-        response.send(JSON.stringify(database.get_all_users()));
+        response.send(JSON.stringify(database.get_users_list()));
     }
 };
 
