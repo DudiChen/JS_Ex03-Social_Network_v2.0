@@ -6,7 +6,7 @@ const StatusCodes = require('http-status-codes').StatusCodes;
 function Post(text){
     this.text = text;
     this.obj_id = database.get_posts_counter();
-    this.creation_date = new Date().toLocaleString();
+    this.creation_date = new Date();
 }
 
 //function create new post and add it to the user posts array
@@ -62,10 +62,10 @@ const find_user_posts = (request, response) =>{
 const check_for_new_posts = (request, response) => {
     const timestamp = request.body.timestamp;
     if (!timestamp) {
-        const time_to_check = new Date.parse(timestamp).getTime();
+        const time_to_check = Date.parse(timestamp);
         const all_posts = database.get_all_posts();
         const latest_post = all_posts[all_posts.length - 1];
-        result = time_to_check < new Date.parse(latest_post.creation_date).getTime();
+        result = time_to_check < Date.parse(latest_post.creation_date);
         response.send(JSON.stringify(result));
     }
     else {

@@ -48,9 +48,9 @@ function get_all_created_users(){
 
 // TODO: test!
 const get_all_posts = () => {
-    all_posts_sorted = get_all_created_users().map(user => user.posts)
-    .sort(compare_posts);
-    return all_posts_sorted;
+    let all_posts = [];
+    get_all_created_users().forEach(user => all_posts = all_posts.concat(user.posts));
+    return all_posts.sort(compare_posts);
 };
 
 const get_all_user_posts = (email) => {
@@ -148,7 +148,7 @@ const remove_validation_token = (token) =>{
     write_validation_token();
 };
 
-const compare_posts = (post1, post2) => new Date.parse(post1.creation_date).getTime() > new Date.parse(post2.creation_date).getTime() ? 1 : -1;
+const compare_posts = (post1, post2) => Date.parse(post1.creation_date) > Date.parse(post2.creation_date) ? 1 : -1;
 
 // module.exports = {check_token, remove_validation_token, add_validation_token, get_all_created_users, add_new_user, read_all_database, write_all_users, get_all_users, get_messages_counter, get_users_counter, get_posts_counter, match_email_to_user, get_user_by_id, write_all_posts, add_new_post, get_all_posts}
 module.exports = {check_token, remove_validation_token, add_validation_token, get_all_created_users, add_new_user, read_all_database, write_all_users, get_all_users, get_messages_counter, get_users_counter, get_posts_counter, match_email_to_user, get_all_posts, get_user_latest_post}

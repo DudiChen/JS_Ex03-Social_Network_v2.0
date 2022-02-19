@@ -130,10 +130,10 @@ const get_all_user_messages = (email) =>
 const check_for_new_messages = (request, response) => {
     const timestamp = request.body.timestamp;
     if (!timestamp) {
-        const time_to_check = new Date.parse(timestamp).getTime();
+        const time_to_check = Date.parse(timestamp);
         const all_messages = database.get_all_user_messages();
         const latest_message = all_posts[all_posts.length - 1];
-        result = time_to_check < new Date.parse(latest_message.creation_date).getTime();
+        result = time_to_check < Date.parse(latest_message.creation_date);
         response.send(JSON.stringify(result));
     }
     else {
@@ -142,6 +142,6 @@ const check_for_new_messages = (request, response) => {
     }
 };
 
-const compare_messages = (msg1, msg2) => new Date.parse(msg1.creation_date).getTime() > new Date.parse(post2.creation_date).getTime() ? 1 : -1;
+const compare_messages = (msg1, msg2) => Date.parse(msg1.creation_date) > Date.parse(post2.creation_date) ? 1 : -1;
 
 module.exports = {send_message, delete_message, get_all_user_messages, check_for_new_messages};
