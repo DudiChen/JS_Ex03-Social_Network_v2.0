@@ -76,32 +76,6 @@ class Admin extends React.Component {
     }
 
     render() {
-        const POSTS_STUB = [{
-            id: 1,
-            email: "alex@gmail.com",
-            usrename: "first post"
-        }, {
-            id: 2,
-            email: "alex@gmail.com",
-            usrename: "second post"
-        }, {
-            id: 3,
-            email: "alex@gmail.com",
-            usrename: "Smoked two joints in the morning"
-        }, {
-            id: 4,
-            email: "dudi@gmail.com",
-            usrename: "Smoked two joints at night"
-        }, {
-            id: 5,
-            email: "dudi@gmail.com",
-            usrename: "Fresh pasta 50 cents. BUY NOW?!@#!@$!@"
-        }, {
-            id: 6,
-            email: "africa@gmail.com",
-            usrename: "KISS KISS"
-        }];
-
         return React.createElement(
             'div',
             null,

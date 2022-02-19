@@ -1,189 +1,9 @@
-// class MainHeader extends React.Component{
-
-//     constructor(props) {
-//         super(props);
-//       }
-
-//     render() 
-//     {
-//         return <header className="main-header">{this.props.children}</header>;
-//     }
-// }
-
-// class Card extends React.Component {
-
-//     constructor(props) 
-//     {
-//         super(props);
-//     }
-
-//     render() 
-//     {
-//         return (
-//             <div className={`card ${this.props.className}`} style={this.props.style}>
-//                 {this.props.children}
-//             </div>
-//         );
-//     }
-// }
-
-// class NavLinks extends React.Component {
-
-//     constructor(props) {
-//         super(props);
-
-//         this.open_login_handler = this.open_login_handler.bind(this);
-//         this.open_register_handler = this.open_register_handler.bind(this);
-//     }
-
-//     open_login_handler() {
-//         window.location.href = "index.html"
-//     }
-
-//     open_register_handler() {
-//         window.location.href = "register.html"
-//     }
-
-//     open_about_handler() {
-//         window.location.href = "about.html"
-//     }
-
-//     render() 
-//     {
-//         return (
-//             <ul className="nav-links">
-//                 <li>
-//                     <Button type='link' onClick={this.open_login_handler}>Login</Button>
-//                 </li>
-//                 <li>
-//                     <Button type='link' onClick={this.open_register_handler}>Register</Button>
-//                 </li>
-//                 <li>
-//                     <Button type='link' onClick={this.open_about_handler}>About</Button>
-//                 </li>
-//             </ul>
-//         )
-//     }
-// }
-
-// class Button extends React.Component {
-
-//     constructor(props) {
-//         super(props);
-//     }
-
-//     render() 
-//     {
-//         if (this.props.href) {
-//             return (
-//               <a
-//                 className={`button button--${this.props.size || 'default'} ${this.props.inverse &&
-//                   'button--inverse'} ${this.props.danger && 'button--danger'}`}
-//                 href={this.props.href}
-//               >
-//                 {this.props.children}
-//               </a>
-//             );
-//           }
-//         //   if (props.to) {
-//         //     return (
-//         //       <Link
-//         //         to={props.to}
-//         //         exact={props.exact}
-//         //         className={`button button--${props.size || 'default'} ${props.inverse &&
-//         //           'button--inverse'} ${props.danger && 'button--danger'}`}
-//         //       >
-//         //         {props.children}
-//         //       </Link>
-//         //     );
-//         //   }
-//           return (
-//             <button
-//               className={`button button--${this.props.size || 'default'} ${this.props.inverse &&
-//                 'button--inverse'} ${this.props.danger && 'button--danger'}`}
-//               type={this.props.type}
-//               onClick={this.props.onClick}
-//               disabled={this.props.disabled}
-//             >
-//               {this.props.children}
-//             </button>
-//           );
-//     }
-// }
-
-// class Input extends React.Component {
-
-//     constructor(props) {
-//         super(props);
-
-//         this.state = {
-//             value: '',
-//         };
-
-//         this.handleInputChange = this.handleInputChange.bind(this);
-//     }
-
-//     handleInputChange(event) 
-//     {
-//         const target = event.target;
-//         const value = target.type === 'checkbox' ? target.checked : target.value;
-//         const name = target.name;
-
-//         this.setState({
-//             ["value"]: value
-//         });
-
-//         this.props.onChange(event, name, value);
-//     }
-
-//     async componentDidMount() 
-// 	{
-// 		this.setState({
-//             ["value"]: this.props.value
-//         });
-// 	}
-
-
-//     render() 
-//     {
-//         const element =
-//             this.props.element === 'input' ? (
-//             <input
-//                 name={this.props.name}
-//                 type={this.props.type}
-//                 placeholder={this.props.placeholder}
-//                 onChange={this.handleInputChange}
-//                 // onBlur={touchHandler}
-//                 value={this.state.value}
-//             />
-//         ) : (
-//             <textarea
-//                 name={this.props.name}
-//                 rows={this.props.rows || 3}
-//                 onChange={this.handleInputChange}
-//                 // onBlur={touchHandler}
-//                 value={this.state.value}
-//             />
-//         );
-
-//         return (
-//             <div className={`form-control`}>
-//             {/* <div     className={`form-control ${!inputState.isValid && inputState.isTouched &&
-//                      'form-control--invalid'}`}
-//                 > */}
-//                 <label htmlFor={this.props.id}>{this.props.label}</label>
-//                     {element}
-//                     {/* {!inputState.isValid && inputState.isTouched && <p>{props.errorText}</p>} */}
-//             </div>
-//         );
-//     }
-// }
-
 class Register extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            full_name: '',
             email: '',
             password: ''
         };
@@ -202,21 +22,17 @@ class Register extends React.Component {
         });
     }
 
-    async componentDidMount() {
-        eraseCookie("token");
-    }
-
     async handle_submit(event) {
         event.preventDefault();
 
+        const full_name = this.state.full_name;
         const email = this.state.email;
         const password = this.state.password;
 
-        alert(`email = ${email}`);
-
-        const response = await fetch('http://localhost:2718/api/users/login', {
+        const response = await fetch('http://localhost:2718/api/users/register', {
             method: 'POST',
             body: JSON.stringify({
+                full_name: full_name,
                 email: email,
                 password: password
             }),
@@ -268,6 +84,20 @@ class Register extends React.Component {
                         null,
                         'Register Form'
                     ),
+                    React.createElement(
+                        'div',
+                        null,
+                        React.createElement(Input, {
+                            element: 'input',
+                            type: 'text',
+                            name: 'full_name',
+                            value: this.state.full_name,
+                            label: 'Full name',
+                            onChange: this.handleInputChange })
+                    ),
+                    React.createElement('span', null),
+                    React.createElement('span', null),
+                    React.createElement('span', null),
                     React.createElement(
                         'div',
                         null,

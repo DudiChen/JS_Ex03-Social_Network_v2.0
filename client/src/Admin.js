@@ -84,39 +84,6 @@ class Admin extends React.Component{
 
     render()
     {
-        const POSTS_STUB = [
-            {
-                id: 1,
-                email: "alex@gmail.com",
-                usrename: "first post"
-            },
-            {
-                id: 2,
-                email: "alex@gmail.com",
-                usrename: "second post"
-            },
-            {
-                id: 3,
-                email: "alex@gmail.com",
-                usrename: "Smoked two joints in the morning"
-            },
-            {
-                id: 4,
-                email: "dudi@gmail.com",
-                usrename: "Smoked two joints at night"
-            },
-            {
-                id: 5,
-                email: "dudi@gmail.com",
-                usrename: "Fresh pasta 50 cents. BUY NOW?!@#!@$!@"
-            },
-            {
-                id: 6,
-                email: "africa@gmail.com",
-                usrename: "KISS KISS"
-            },
-        ]
-
         return (
             <div>
                 <MainHeader>
@@ -135,7 +102,6 @@ class Admin extends React.Component{
                     <h2>Pending users for approval</h2>
                     {this.state.all_users.map(user => (
                         <Card className="place-form">
-                            {/* <h3>{post.email}</h3> */}
                             <h3>{user.email}</h3>
                             <h3>{user.full_name}</h3>
                             <Button className='approve-button' type="submit">APPROVE</Button>
