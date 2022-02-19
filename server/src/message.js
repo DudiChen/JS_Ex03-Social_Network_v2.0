@@ -122,4 +122,26 @@ const delete_message = (request, response) =>{
 };
 
 
-module.exports = {send_message, delete_message};
+const get_all_user_messages = (email) =>
+{
+    return database.match_email_to_user(email).messages.sort(compare_messages);
+}
+
+const check_for_new_messages = (request, response) => {
+    const timestamp = request.body.timestamp;
+    if (!timestamp) {
+        const time_to_check = new Date.parse(timestamp).getTime();
+        const all_messages = database.get_all_user_messages();
+        const latest_message = all_posts[all_posts.length - 1];
+        result = time_to_check < new Date.parse(latest_message.creation_date).getTime();
+        response.send(JSON.stringify(result));
+    }
+    else {
+        response.status(StatusCodes.BAD_REQUEST);
+        response.send('Input require; missing timestamp!');
+    }
+};
+
+const compare_messages = (msg1, msg2) => new Date.parse(msg1.creation_date).getTime() > new Date.parse(post2.creation_date).getTime() ? 1 : -1;
+
+module.exports = {send_message, delete_message, get_all_user_messages, check_for_new_messages};

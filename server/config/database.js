@@ -42,7 +42,7 @@ function write_validation_token(){
 }
 
 function get_all_created_users(){
-    const filter_request = users.filter(user => user.status === 'created');
+    const filter_request = users.filter(user => user.status === 'active');
     return filter_request;
 };
 
