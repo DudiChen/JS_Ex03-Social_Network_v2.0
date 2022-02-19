@@ -1,1 +1,0 @@
-(()=>{"use strict";React.Component,React.Component,React.Component,React.Component,React.Component,React.Component})();
