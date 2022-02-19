@@ -5,6 +5,7 @@ const database = require("../config/database");
 const verifyToken = (req, res, next) => {
 
     const authHeader = req.headers['authorization'];
+    // TODO: Verified token!
     const token = authHeader && authHeader.split(' ')[1];
   
     if (!token) {
