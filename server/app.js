@@ -6,6 +6,7 @@ const post = require('./src/post.js');
 const auth = require("./middleware/auth");
 const database = require('./config/database');
 const { route } = require('express/lib/router');
+const path = require("path");
 
 const app = express()
 let  port = 2718;
@@ -39,6 +40,16 @@ database.read_all_database();
 //functionality
 router.get('/version', (req, res) => { get_version(req, res )  } );
 
+// app.get('/', function(request, response){
+//     response.sendFile('C:\\Users\\alexl\\Documents\\JavaScript\\Assignment 3\\Backend\\API\\Frontend\\index.html');
+// });
+
+app.use('/Frontend', express.static(path.join(__dirname + '/Frontend')));
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname + "/Frontend/index.html"));
+});
+
 router.post("/welcome", (req, res) => {
   res.status(200).send("Welcome 🙌 ");
 });
@@ -57,6 +68,9 @@ router.post('/post/send_post', auth, (req, res) => { post.create_post(req, res )
 router.get('/post/check_for_new_posts', auth, (req, res) => { post.check_for_new_posts(req, res )  } ); //)
 router.delete('/post/delete_post', auth, (req, res) => { post.delete_post(req, res )  } );//
 router.delete('/post/delete_post_admin', auth, (req, res) => { post.delete_post_admin(req, res )  } );//
+
+
+
 
 app.use((req, res, next) => {
 	res.setHeader('Access-Control-Allow-Origin', '*');
