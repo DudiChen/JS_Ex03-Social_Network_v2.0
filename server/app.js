@@ -54,7 +54,7 @@ router.get('/message/check_for_new_messages', auth, api_content, (req, res) => {
 router.get('/post/get_all_posts', auth, api_content, (req, res) => { post.get_all_posts(req, res )  } );//
 router.post('/post/user_posts', api_content, (req, res) => { post.find_user_posts(req, res) } ); //
 router.post('/post/send_post', auth, api_content, (req, res) => { post.create_post(req, res )  } ); //
-router.get('/post/check_for_new_posts', auth, api_content, (req, res) => { post.check_for_new_posts(req, res )  } ); //)
+router.post('/post/check_for_new_posts', auth, api_content, (req, res) => { post.check_for_new_posts(req, res )  } ); //)
 router.delete('/post/delete_post', auth, api_content, (req, res) => { post.delete_post(req, res )  } );//
 router.delete('/post/delete_post_admin', auth, api_content, (req, res) => { post.delete_post_admin(req, res )  } );//
 
