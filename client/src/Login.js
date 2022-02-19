@@ -50,8 +50,6 @@ class Login extends React.Component{
     async componentDidMount() 
 	{
 		eraseCookie("token");
-        setCookie("isAdmin", false, 3);
-        setCookie("isLoggedIn", false, 3);
 	}
 
     async handle_submit(event)
@@ -61,8 +59,6 @@ class Login extends React.Component{
 		const email = this.state.email;
         const password = this.state.password;
 
-        alert( `email = ${email}` )
-        
 		const response = await fetch('http://localhost:2718/api/users/login' , 
 							{
                                 method:'POST', 
@@ -77,9 +73,6 @@ class Login extends React.Component{
 		{
             const responseJson = await response.json();   
             setCookie("token", responseJson.token, 3);
-            setCookie("isAdmin", false, 3);
-            setCookie("isLoggedIn", true, 3);
-
             window.location.href = "homepage.html"
 		}
 		// else 

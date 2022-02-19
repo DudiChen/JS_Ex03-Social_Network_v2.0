@@ -4,10 +4,13 @@ class Messages extends React.Component{
         super(props);
         this.state = {
             text: '',
+            to: '',
+            all_messages: []
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handle_submit = this.handle_submit.bind(this);
+        this.fetch_messages = this.fetch_messages.bind(this);
     }
 
     handleInputChange(event, name, value) 
@@ -18,15 +21,10 @@ class Messages extends React.Component{
         });
     }
 
-    async fetch_posts() {
-        const email = "admin@gmail.com";
-        
-		const response = await fetch('http://localhost:2718/api/post/user_posts' , 
+    async fetch_messages() {
+		const response = await fetch('http://localhost:2718/api/message/get_all_messages' , 
 							{
-                                method:'POST', 
-							    body: JSON.stringify({
-                                    email: email,
-                                }), 
+                                method:'GET', 
 						        headers: {
                                         'Content-Type': 'application/json',
                                         'Authorization': `Bearer ${getCookie("token")}`
@@ -35,7 +33,7 @@ class Messages extends React.Component{
                              
 		if ( response.status == 200 )
 		{
-            const responseJson = await response.json();   
+            const responseJson = await response.json();
             return responseJson;
 		}
 
@@ -44,35 +42,37 @@ class Messages extends React.Component{
 
     async componentDidMount() 
 	{
-		const posts = await this.fetch_posts();
-		//this.update_list(users);
+		let messages = await this.fetch_messages();
+        this.setState({
+            ["all_messages"]: messages
+        });
 	}
 
     async handle_submit(event)
 	{
         event.preventDefault();
 
-		const username = this.state.username;
-        const password = this.state.password;
+		const to = this.state.to;
+        const text = this.state.text;
         
-		const response = await fetch('http://localhost:2718/api/users/send_message' , 
+		const response = await fetch('http://localhost:2718/api/message/send_message' , 
 							{
                                 method:'POST', 
 							    body: JSON.stringify({
-                                    text: username,
-                                    to: password,
-                                    send_all: false
+                                    text: text,
+                                    to: to,
+                                    send_all: "false"
                                 }), 
 						        headers: {
-                                     'Content-Type': 'application/json',
-
-                                    }
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${getCookie("token")}`
+                                }
                             });
                              
 		if ( response.status == 200 )
 		{
-            const responseJson = await response.json();   
-            setCookie("token", responseJson.token, 3);
+            const responseJson = await response.json();
+            alert("message sent!")   
 		}
 	}
 
@@ -131,18 +131,26 @@ class Messages extends React.Component{
                     <Card className="message-form">
                         <form onSubmit={this.handle_submit}>
                             <Input 
+                                element='input' 
+                                type='text' 
+                                name='to' 
+                                value={this.state.to} 
+                                label='Recipient email' 
+                                onChange={this.handleInputChange}>
+                            </Input>
+                            <Input 
                                 element='textarea' 
                                 type='text' 
                                 name='text' 
                                 value={this.state.text} 
-                                label='Add your post here' 
+                                label='Message content' 
                                 onChange={this.handleInputChange}>
                             </Input>
                             <Button className='login_button' type="submit">SUBMIT</Button>
                         </form>
                     </Card>
                     <h2>Your messages</h2>
-                    {MESSAGES_STUB.map(post => (
+                    {this.state.all_messages.map(post => (
                         <Card className="place-form">
                             <h3>{post.email}</h3>
                             <p>{post.text}</p>

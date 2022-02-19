@@ -122,9 +122,11 @@ const delete_message = (request, response) =>{
 };
 
 
-const get_all_user_messages = (email) =>
+const get_all_user_messages = (request, response) =>
 {
-    return database.match_email_to_user(email).messages.sort(compare_messages);
+    email = request.user.name;
+    messages = database.get_all_user_messages(email);
+    response.send(JSON.stringify(messages));
 }
 
 const check_for_new_messages = (request, response) => {
@@ -142,6 +144,6 @@ const check_for_new_messages = (request, response) => {
     }
 };
 
-const compare_messages = (msg1, msg2) => Date.parse(msg1.creation_date) > Date.parse(post2.creation_date) ? 1 : -1;
+// const compare_messages = (msg1, msg2) => Date.parse(msg1.creation_date) > Date.parse(post2.creation_date) ? 1 : -1;
 
 module.exports = {send_message, delete_message, get_all_user_messages, check_for_new_messages};

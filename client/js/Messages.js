@@ -3,11 +3,14 @@ class Messages extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            text: ''
+            text: '',
+            to: '',
+            all_messages: []
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handle_submit = this.handle_submit.bind(this);
+        this.fetch_messages = this.fetch_messages.bind(this);
     }
 
     handleInputChange(event, name, value) {
@@ -17,14 +20,9 @@ class Messages extends React.Component {
         });
     }
 
-    async fetch_posts() {
-        const email = "admin@gmail.com";
-
-        const response = await fetch('http://localhost:2718/api/post/user_posts', {
-            method: 'POST',
-            body: JSON.stringify({
-                email: email
-            }),
+    async fetch_messages() {
+        const response = await fetch('http://localhost:2718/api/message/get_all_messages', {
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${getCookie("token")}`
@@ -40,32 +38,34 @@ class Messages extends React.Component {
     }
 
     async componentDidMount() {
-        const posts = await this.fetch_posts();
-        //this.update_list(users);
+        let messages = await this.fetch_messages();
+        this.setState({
+            ["all_messages"]: messages
+        });
     }
 
     async handle_submit(event) {
         event.preventDefault();
 
-        const username = this.state.username;
-        const password = this.state.password;
+        const to = this.state.to;
+        const text = this.state.text;
 
-        const response = await fetch('http://localhost:2718/api/users/send_message', {
+        const response = await fetch('http://localhost:2718/api/message/send_message', {
             method: 'POST',
             body: JSON.stringify({
-                text: username,
-                to: password,
-                send_all: false
+                text: text,
+                to: to,
+                send_all: "false"
             }),
             headers: {
-                'Content-Type': 'application/json'
-
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${getCookie("token")}`
             }
         });
 
         if (response.status == 200) {
             const responseJson = await response.json();
-            setCookie("token", responseJson.token, 3);
+            alert("message sent!");
         }
     }
 
@@ -133,11 +133,18 @@ class Messages extends React.Component {
                         'form',
                         { onSubmit: this.handle_submit },
                         React.createElement(Input, {
+                            element: 'input',
+                            type: 'text',
+                            name: 'to',
+                            value: this.state.to,
+                            label: 'Recipient email',
+                            onChange: this.handleInputChange }),
+                        React.createElement(Input, {
                             element: 'textarea',
                             type: 'text',
                             name: 'text',
                             value: this.state.text,
-                            label: 'Add your post here',
+                            label: 'Message content',
                             onChange: this.handleInputChange }),
                         React.createElement(
                             Button,
@@ -151,7 +158,7 @@ class Messages extends React.Component {
                     null,
                     'Your messages'
                 ),
-                MESSAGES_STUB.map(post => React.createElement(
+                this.state.all_messages.map(post => React.createElement(
                     Card,
                     { className: 'place-form' },
                     React.createElement(
