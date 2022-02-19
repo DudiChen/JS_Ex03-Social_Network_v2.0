@@ -6,14 +6,14 @@ const fs = require('fs').promises;
 
 //suntion reads the users and tokens array from files that used a DB
 async function read_all_database (){
-    await fs.readFile('./config/users.json').then((data) =>{
+    await fs.readFile('./server/config/users.json').then((data) =>{
         const users_from_file = (JSON.parse(data));
         users = [...users_from_file];
     }).catch((error) => {console.log("users file reading error");
     throw error;
     });
 
-    await fs.readFile('./config/validationTokens.json').then((data) =>{
+    await fs.readFile('./server/config/validationTokens.json').then((data) =>{
         const tokens_from_file = (JSON.parse(data));
         validation_token = [...tokens_from_file];
     }).catch((error) => {console.log("tokens file reading error");
@@ -30,7 +30,7 @@ async function read_all_database (){
 
 //function save the users array back to users.json file
 async function write_all_users (){
-    await fs.writeFile('./config/users.json',JSON.stringify(users));
+    await fs.writeFile('./server/config/users.json',JSON.stringify(users));
 };
 
 // async function write_all_posts (){
@@ -38,7 +38,7 @@ async function write_all_users (){
 // };
 
 function write_validation_token(){
-    fs.writeFile('./config/validationTokens.json',JSON.stringify(validation_token));
+    fs.writeFile('./server/config/validationTokens.json',JSON.stringify(validation_token));
 }
 
 function get_all_created_users(){

@@ -7,9 +7,14 @@
 	<script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
 	<script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
 
+	<meta http-equiv="Content-Security-Policy" content="default-src *;
+    img-src * 'self' data: https: http:;
+    script-src 'self' 'unsafe-inline' 'unsafe-eval' *;
+    style-src  'self' 'unsafe-inline' *">
+
 	<script src="js/Login.js"></script>
 	
-	<!-- <link rel="icon" type="image/x-icon" href="/images/favicon.ico"> -->
+	<!-- <link rel="icon" type="image/x-icon" href="./favicon.ico"> -->
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
 	<link rel="stylesheet" type='text/css' href="css/NavLinks.css">
 	<link rel="stylesheet" type='text/css' href="css/Auth.css">

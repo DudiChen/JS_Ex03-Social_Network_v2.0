@@ -1,5 +1,5 @@
 const express = require('express');
-const package = require('./package.json');
+const package = require('../package.json');
 const users = require('./src/users.js');
 const message = require('./src/message.js');
 const post = require('./src/post.js');
@@ -44,13 +44,14 @@ router.get('/version', (req, res) => { get_version(req, res )  } );
 //     response.sendFile('C:\\Users\\alexl\\Documents\\JavaScript\\Assignment 3\\Backend\\API\\Frontend\\index.html');
 // });
 
-app.use(express.static(path.join(__dirname + '../../../Frontend')));
+app.use(express.static(path.join(__dirname , '../client')));
+//app.use(express.static('client'));
 
 // app.get("/", (req, res) => {
 //   res.sendFile(path.join(__dirname + "../../../Frontend/index.html"));
 // });
 
-app.get('/favicon.ico', (req, res) => res.status(204));
+// app.get('/favicon.ico', (req, res) => res.status(204));
 
 router.post("/welcome", (req, res) => {
   res.status(200).send("Welcome 🙌 ");
@@ -81,7 +82,7 @@ app.use((req, res, next) => {
 	  'Origin, X-Requested-With, Content-Type, Accept, Authorization'
 	);
 	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
-  
+	res.setHeader('Content-Security-Policy', 'img-src \'self\'');	
 	next();
   });
 

@@ -1,24 +1,19 @@
 {
-  "name": "api",
+  "name": "ex03-social-network-v2.0_server",
   "version": "1.0.0",
-  "description": "",
+  "description": "README :",
   "main": "app.js",
   "scripts": {
-    "devStart": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "bcrypt": "^5.0.1",
-    "dotenv": "^10.0.0",
-    "express": "^4.17.2",
-    "fs": "^0.0.1-security",
-    "http-status-codes": "^2.1.4",
-    "jsonwebtoken": "^8.5.1"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DudiChen/JS_Ex03-Social_Network_v2.0.git"
   },
-  "devDependencies": {
-    "nodemon": "^2.0.15"
-  }
+  "author": "DavidChen & AlexLefonde",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DudiChen/JS_Ex03-Social_Network_v2.0/issues"
+  },
+  "homepage": "https://github.com/DudiChen/JS_Ex03-Social_Network_v2.0#readme"
 }
