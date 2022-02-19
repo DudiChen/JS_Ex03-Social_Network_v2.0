@@ -73,6 +73,8 @@ class Login extends React.Component{
 		{
             const responseJson = await response.json();   
             setCookie("token", responseJson.token, 3);
+            window.isAdmin = true;
+            alert(`${window.isAdmin}`)
             window.location.href = "homepage.html"
 		}
 		// else 

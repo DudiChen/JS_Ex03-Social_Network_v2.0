@@ -49,6 +49,25 @@ class Homapage extends React.Component {
         return [];
     }
 
+    async check_new_posts() {
+        const latestDateTime = this.state.all_posts[0].creation_date;
+
+        const response = await fetch('http://localhost:2718/api/post/check_for_new_posts', {
+            method: 'POST',
+            body: JSON.stringify({
+                timestamp: latestDateTime
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${getCookie("token")}`
+            }
+        });
+
+        if (response.status == 200) {
+            alert("check success!");
+        }
+    }
+
     async submit_new_post(event) {
 
         event.preventDefault();
@@ -71,12 +90,23 @@ class Homapage extends React.Component {
         }
     }
 
-    async componentDidMount() {
+    async componentDidMount(event) {
         let posts = await this.fetch_posts();
         this.setState({
             ["all_posts"]: posts
         });
+        alert(`${window.isAdmin}`);
+        if (window.isAdmin) {
+            alert("yay");
+        }
+        // this.interval = setInterval(() => {
+        //     this.check_new_posts(event);
+        // }, 10000);
         //this.update_list(users);
+    }
+
+    async componentWillUnmount() {
+        clearInterval(this.interval);
     }
 
     async handle_submit(event) {
